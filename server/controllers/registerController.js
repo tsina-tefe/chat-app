@@ -18,10 +18,25 @@ const registerUser = async (req, res) => {
       .json({ message: "Invalid Email, Please enter valid Email" });
   }
 
-  if (password.length <= 8) {
-    res
-      .status(400)
-      .json({ message: "Password should be greater than 8 characters." });
+  if (
+    !validator.isStrongPassword(password, {
+      minLength: 8,
+      minUppercase: 1,
+      minLowercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    })
+  ) {
+    return res.status(400).json({
+      message:
+        "Password must be at least 8 characters and include uppercase, lowercase, and a number",
+    });
+  }
+
+  if (!validator.isAlphanumeric(username)) {
+    return res.status(400).json({
+      message: "Username must contain only letters and numbers",
+    });
   }
 
   const hashedPass = await bcrypt.hash(password, 10);

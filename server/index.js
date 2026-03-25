@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import register from "./routes/register.js";
 import cors from "cors";
 import testHome from "./routes/testHome.js";
+import login from "./routes/login.js";
 
 dotenv.config();
 
@@ -49,6 +50,11 @@ app.get("/", testHome);
 
 app.use("/api/register", register);
 
-// app.use("/api/login", login)
+app.use("/api/login", login);
 // app.use("/api/rooms", auth.requireAuth, rooms);
 // app.use("/api/messages", auth.requireAuth, messages);
+
+app.use((err, req, res, next) => {
+  console.error("Error:", err);
+  res.status(500).json({ message: "Internal server error" });
+});
