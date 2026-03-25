@@ -3,6 +3,7 @@ import express from "express";
 import { Server } from "socket.io";
 import register from "./routes/register.js";
 import cors from "cors";
+import testHome from "./routes/testHome.js";
 
 dotenv.config();
 
@@ -35,19 +36,16 @@ const io = new Server(expressServer, {
   },
 });
 
-// app.use((req, res, next) => {
-//   req.io = io;
-//   next();
-// });
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
 
 io.on("connection", (socket) => {
   console.log("User has connected: ", socket.id);
 });
 
-app.get("/", (req, res) => {
-  io.emit("message", "Greetings from the backend");
-  res.status(200).json({ data: "Salut" });
-});
+app.get("/", testHome);
 
 app.use("/api/register", register);
 

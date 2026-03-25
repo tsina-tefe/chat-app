@@ -3,12 +3,12 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 
 const registerUser = async (req, res) => {
-  const fullName = req.body.fullName.trim();
+  const name = req.body.name.trim();
   const username = req.body.username.trim();
   const email = req.body.email.trim();
   const password = req.body.password.trim();
 
-  if (!fullName || !username || !email || !password) {
+  if (!name || !username || !email || !password) {
     return res.status(400).json({ message: "Please fill in all fields" });
   }
 
@@ -31,7 +31,7 @@ const registerUser = async (req, res) => {
     VALUES (?, ?, ?, ?)
     `;
 
-  db.query(registerUser, [fullName, email, username, hashedPass], (error) => {
+  db.query(registerUser, [name, email, username, hashedPass], (error) => {
     if (error) {
       if (error.code === "ER_DUP_ENTRY") {
         return res.status(400).json({ message: "Email already in use" });
