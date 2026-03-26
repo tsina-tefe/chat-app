@@ -52,6 +52,7 @@ const loginController = (req, res) => {
         name: user.name,
         email: user.email,
         username: user.username,
+        room: user.current_room_id,
       },
     });
   });

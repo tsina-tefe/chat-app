@@ -1,9 +1,14 @@
-const socket = io("ws://localhost:3500");
+const socket = io("ws://localhost:3500", {
+  auth: {
+    token:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzc0NDU2NTAzLCJleHAiOjE3NzQ1NDI5MDN9.iqBKkDSzOfgLFNp9FFBaPgizH9tIC6aOy7h7ElbP97U",
+  },
+});
 
 const data = document.querySelector(".data");
 const message = document.querySelector(".message");
 
-socket.on("connect", salut);
+socket.emit("message", "Message from front end");
 
 socket.on("message", (data) => {
   console.log("from socket");
@@ -13,9 +18,11 @@ socket.on("message", (data) => {
 
 console.log("wagoan");
 
-async function salut() {
-  const res = await fetch("http://localhost:3500");
-  const msg = await res.json();
-  console.log(msg);
-  data.textContent = msg.data;
-}
+// socket.on("connect", salut);
+
+// async function salut() {
+//   const res = await fetch("http://localhost:3500");
+//   const msg = await res.json();
+//   console.log(msg);
+//   data.textContent = msg.data;
+// }

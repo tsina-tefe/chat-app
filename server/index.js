@@ -3,13 +3,12 @@ import express from "express";
 import { Server } from "socket.io";
 import register from "./routes/register.js";
 import cors from "cors";
-import testHome from "./routes/testHome.js";
 import login from "./routes/login.js";
+import { initSocket } from "./socket/socket.js";
 
 dotenv.config();
 
 const PORT = process.env.PORT;
-const ADMIN = "Admin";
 
 const app = express();
 
@@ -19,14 +18,6 @@ const expressServer = app.listen(PORT, () => {
 
 app.use(express.json());
 app.use(cors());
-
-// users state
-const UsersState = {
-  users: [],
-  setUsers: (newUsersArray) => {
-    UsersState.users = newUsersArray;
-  },
-};
 
 const io = new Server(expressServer, {
   cors: {
@@ -42,17 +33,11 @@ app.use((req, res, next) => {
   next();
 });
 
-io.on("connection", (socket) => {
-  console.log("User has connected: ", socket.id);
-});
-
-app.get("/", testHome);
+initSocket(io);
 
 app.use("/api/register", register);
 
 app.use("/api/login", login);
-// app.use("/api/rooms", auth.requireAuth, rooms);
-// app.use("/api/messages", auth.requireAuth, messages);
 
 app.use((err, req, res, next) => {
   console.error("Error:", err);
