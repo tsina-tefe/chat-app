@@ -24,7 +24,6 @@ export const roomHandler = (io, socket) => {
       if (previousRoomId && previousRoomId !== roomId) {
         socket.leave(previousRoomId);
 
-        // Notify everyone in the OLD room to remove this user from their UI list
         socket.to(previousRoomId).emit("user_left", {
           userId: userId,
           message: buildMsg(ADMIN, `${user.name} has left the room`),
@@ -33,7 +32,6 @@ export const roomHandler = (io, socket) => {
         console.log(`User ${userId} left room: ${previousRoomId}`);
       }
 
-      // Set the user's new location in the DB
       await db
         .promise()
         .query("UPDATE users SET current_room_id = ? WHERE id = ?", [
@@ -44,7 +42,6 @@ export const roomHandler = (io, socket) => {
       // JOIN NEW ROOM
       socket.join(roomId);
 
-      // Tell everyone in the NEW room to add this user to their UI list
       socket.to(roomId).emit("user_joined", {
         user: {
           id: userId,
@@ -69,7 +66,6 @@ export const roomHandler = (io, socket) => {
     const userId = socket.user.id;
 
     try {
-      // Fetch user's current room and name before clearing it
       const [users] = await db
         .promise()
         .query("SELECT username, current_room_id FROM users WHERE id = ?", [
@@ -78,7 +74,7 @@ export const roomHandler = (io, socket) => {
 
       if (users.length === 0 || !users[0].current_room_id) {
         console.log("user not in any room");
-        return; // User wasn't in a room anyway
+        return;
       }
 
       const roomId = users[0].current_room_id;
@@ -111,6 +107,43 @@ export const roomHandler = (io, socket) => {
       socket.emit("error", {
         message: buildMsg(ADMIN, "Error while leaving the room"),
       });
+    }
+  });
+
+  socket.on("disconnecting", async () => {
+    const userId = socket.user.id;
+
+    const rooms = Array.from(socket.rooms).filter((r) => r !== socket.id);
+
+    if (rooms.length > 0 && userId) {
+      const roomId = rooms[0];
+
+      try {
+        const [users] = await db
+          .promise()
+          .query("SELECT username FROM users WHERE id = ?", [userId]);
+
+        if (users.length > 0) {
+          const userName = users[0].username;
+
+          await db
+            .promise()
+            .query("UPDATE users SET current_room_id = NULL WHERE id = ?", [
+              userId,
+            ]);
+
+          socket.to(roomId).emit("user_left", {
+            userId: userId,
+            message: buildMsg(ADMIN, `${userName} has disconnected`),
+          });
+
+          console.log(
+            `User ${userId} (${userName}) disconnected and cleared from ${roomId}`,
+          );
+        }
+      } catch (error) {
+        console.error("Disconnect Error:", error);
+      }
     }
   });
 };
