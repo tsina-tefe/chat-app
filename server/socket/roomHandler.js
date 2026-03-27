@@ -1,9 +1,116 @@
+import { buildMsg } from "../utils/buildMsg.js";
+import db from "../config/db.js";
+
 export const roomHandler = (io, socket) => {
-  socket.on("enterRoom", (message) => {
-    socket.emit("enterRoom", `Welcome to the family ${message}`);
+  const ADMIN = "Admin";
+
+  socket.on("join_room", async (data) => {
+    const { roomId, userId } = data;
+
+    try {
+      // Fetch User and their PREVIOUS room from DB
+      const [users] = await db
+        .promise()
+        .query(
+          "SELECT username, avatar, current_room_id FROM users WHERE id = ?",
+          [userId],
+        );
+
+      if (users.length === 0) return;
+      const user = users[0];
+      const previousRoomId = user.current_room_id;
+
+      // LEAVE PREVIOUS ROOM (If they were in one and it's different)
+      if (previousRoomId && previousRoomId !== roomId) {
+        socket.leave(previousRoomId);
+
+        // Notify everyone in the OLD room to remove this user from their UI list
+        socket.to(previousRoomId).emit("user_left", {
+          userId: userId,
+          message: buildMsg(ADMIN, `${user.name} has left the room`),
+        });
+
+        console.log(`User ${userId} left room: ${previousRoomId}`);
+      }
+
+      // Set the user's new location in the DB
+      await db
+        .promise()
+        .query("UPDATE users SET current_room_id = ? WHERE id = ?", [
+          roomId,
+          userId,
+        ]);
+
+      // JOIN NEW ROOM
+      socket.join(roomId);
+
+      // Tell everyone in the NEW room to add this user to their UI list
+      socket.to(roomId).emit("user_joined", {
+        user: {
+          id: userId,
+          name: user.username,
+          avatar: user.avatar,
+        },
+        message: buildMsg(ADMIN, `${user.username} has joined the room`),
+      });
+
+      // Send a confirmation back to the user who joined
+      socket.emit("room_joined_success", {
+        roomId: roomId,
+        message: buildMsg(ADMIN, `You are now in ${roomId}`),
+      });
+    } catch (error) {
+      console.error("Socket Join Error:", error);
+      socket.emit("error", { message: "Could not join room" });
+    }
   });
 
-  const prevRoom = socket.user.room;
+  socket.on("leave_room", async () => {
+    const userId = socket.user.id;
 
-  console.log(prevRoom);
+    try {
+      // Fetch user's current room and name before clearing it
+      const [users] = await db
+        .promise()
+        .query("SELECT username, current_room_id FROM users WHERE id = ?", [
+          userId,
+        ]);
+
+      if (users.length === 0 || !users[0].current_room_id) {
+        console.log("user not in any room");
+        return; // User wasn't in a room anyway
+      }
+
+      const roomId = users[0].current_room_id;
+      const userName = users[0].username;
+
+      // UPDATE DATABASE: Set room to NULL
+      await db
+        .promise()
+        .query("UPDATE users SET current_room_id = NULL WHERE id = ?", [
+          userId,
+        ]);
+
+      // SOCKET LEAVE: Physically remove them from the socket room
+      socket.leave(roomId);
+
+      // NOTIFY OTHERS
+      socket.to(roomId).emit("user_left", {
+        userId: userId,
+        message: buildMsg(ADMIN, `${userName} has left the room`),
+      });
+
+      // ACKNOWLEDGE TO SENDER
+      socket.emit("leave_success", {
+        message: buildMsg(ADMIN, `You have left ${roomId}`),
+      });
+
+      console.log(`User ${userId} successfully left room: ${roomId}`);
+    } catch (error) {
+      console.error("Leave Room Error:", error);
+      socket.emit("error", {
+        message: buildMsg(ADMIN, "Error while leaving the room"),
+      });
+    }
+  });
 };

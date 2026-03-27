@@ -1,4 +1,5 @@
 import { roomHandler } from "./roomHandler.js";
+import jwt from "jsonwebtoken";
 
 export const initSocket = (io) => {
   console.log("io");
@@ -18,10 +19,8 @@ export const initSocket = (io) => {
   io.on("connection", (socket) => {
     console.log("User has connected: ", socket.id);
 
-    io.on("message", (message) => {
-      io.emit("message", `Greetings from the backend ${message}`);
-    });
+    io.emit("message", "Greetings from the backend");
 
-    // roomHandler(io, socket);
+    roomHandler(io, socket);
   });
 };

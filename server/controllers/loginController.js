@@ -39,7 +39,11 @@ const loginController = (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const payload = { id: user.id, name: user.name };
+    const payload = {
+      userId: user.id,
+      name: user.name,
+      roomId: user.current_room_id,
+    };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
@@ -48,11 +52,11 @@ const loginController = (req, res) => {
       token,
       message: "Login Successful",
       user: {
-        id: user.id,
+        userId: user.id,
         name: user.name,
         email: user.email,
         username: user.username,
-        room: user.current_room_id,
+        roomId: user.current_room_id,
       },
     });
   });

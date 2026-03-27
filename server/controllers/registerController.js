@@ -41,24 +41,30 @@ const registerUser = async (req, res) => {
 
   const hashedPass = await bcrypt.hash(password, 10);
 
+  const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(email)}`;
+
   const registerUser = `
-        INSERT INTO users(full_name, email, username, password)
-    VALUES (?, ?, ?, ?)
+        INSERT INTO users(full_name, email, avatar, username, password)
+    VALUES (?, ?, ?, ?, ?)
     `;
 
-  db.query(registerUser, [name, email, username, hashedPass], (error) => {
-    if (error) {
-      if (error.code === "ER_DUP_ENTRY") {
-        return res.status(400).json({ message: "Email already in use" });
+  db.query(
+    registerUser,
+    [name, email, avatarUrl, username, hashedPass],
+    (error) => {
+      if (error) {
+        if (error.code === "ER_DUP_ENTRY") {
+          return res.status(400).json({ message: "Email already in use" });
+        }
+
+        return res
+          .status(500)
+          .json({ message: "Something went wrong, try again later" });
       }
 
-      return res
-        .status(500)
-        .json({ message: "Something went wrong, try again later" });
-    }
-
-    res.status(201).json({ message: "Account created successfully" });
-  });
+      res.status(201).json({ message: "Account created successfully" });
+    },
+  );
 };
 
 export default registerUser;
