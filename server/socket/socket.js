@@ -1,4 +1,5 @@
 import { roomHandler } from "./roomHandler.js";
+import { messageHandler } from "./messageHandler.js";
 import jwt from "jsonwebtoken";
 
 export const initSocket = (io) => {
@@ -22,5 +23,7 @@ export const initSocket = (io) => {
     io.emit("message", "Greetings from the backend");
 
     roomHandler(io, socket);
+
+    messageHandler(io, socket);
   });
 };

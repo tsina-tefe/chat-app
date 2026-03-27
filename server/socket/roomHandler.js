@@ -58,7 +58,7 @@ export const roomHandler = (io, socket) => {
       });
     } catch (error) {
       console.error("Socket Join Error:", error);
-      socket.emit("error", { message: "Could not join room" });
+      socket.emit("error", { message: buildMsg(ADMIN, "Could not join room") });
     }
   });
 
