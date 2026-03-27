@@ -51,6 +51,15 @@ export const joinRoom = (io, socket) => {
         message: buildMsg(ADMIN, `${user.username} has joined the room`),
       });
 
+      const [activeUsers] = await db
+        .promise()
+        .query(
+          "SELECT id, username, avatar FROM Users WHERE current_room_id = ?",
+          [roomId],
+        );
+
+      socket.emit("update_user_list", activeUsers);
+
       // Send a confirmation back to the user who joined
       socket.emit("room_joined_success", {
         roomId: roomId,

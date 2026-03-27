@@ -1,9 +1,8 @@
 import express from "express";
+import { getActiveRooms } from "../controllers/roomController.js";
 
 const router = express.Router();
 
-router.post("/enterRoom", joinRoom);
-
-// router.post("/leaveRoom", leaveRoom)
+router.get("/", getActiveRooms);
 
 export default router;

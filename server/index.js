@@ -5,6 +5,8 @@ import register from "./routes/register.js";
 import cors from "cors";
 import login from "./routes/login.js";
 import { initSocket } from "./socket/socket.js";
+import room from "./routes/room.js";
+import authenticateToken from "./middleware/authenticateToken.js";
 
 dotenv.config();
 
@@ -38,6 +40,8 @@ initSocket(io);
 app.use("/api/register", register);
 
 app.use("/api/login", login);
+
+app.use("/api/room", authenticateToken, room);
 
 app.use((err, req, res, next) => {
   console.error("Error:", err);
