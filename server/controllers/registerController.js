@@ -3,10 +3,10 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 
 const registerUser = async (req, res) => {
-  const name = req.body.name.trim();
-  const username = req.body.username.trim();
-  const email = req.body.email.trim();
-  const password = req.body.password.trim();
+  const name = req.body.name?.trim();
+  const username = req.body.username?.trim();
+  const email = req.body.email?.trim();
+  const password = req.body.password?.trim();
 
   if (!name || !username || !email || !password) {
     return res.status(400).json({ message: "Please fill in all fields" });
