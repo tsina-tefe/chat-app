@@ -23,13 +23,17 @@ const Register = () => {
   };
 
   const handleRegister = async () => {
-    if (!formData.name || !formData.email || !formData.password) {
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.username ||
+      !formData.password
+    ) {
       setError("Please fill in all the fields.");
       return;
     }
 
     setLoading(true);
-    console.log(formData);
     try {
       const res = await register(formData);
       setMessage(res.message);
@@ -38,7 +42,11 @@ const Register = () => {
         //naviagate("/login")
       }, 2000);
     } catch (error) {
-      if (error.response && error.response.data) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         setError(error.response.data.message);
       } else {
         setError("Something went wrong");
@@ -76,7 +84,6 @@ const Register = () => {
               e.preventDefault();
               setError("");
               handleRegister();
-              console.log("register");
             }}
           >
             {loading ? "Registering" : "Sign Up"}
