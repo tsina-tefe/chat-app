@@ -6,8 +6,8 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 
 const loginController = (req, res) => {
-  const email = req.body.email.trim();
-  const password = req.body.password.trim();
+  const email = req.body?.email?.trim();
+  const password = req.body?.password?.trim();
 
   if (!email || !password) {
     return res
