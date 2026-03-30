@@ -1,13 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import LeftSidebar from "../components/LeftSidebar";
 import RightSidebar from "../components/RightSidebar";
 import CurrentRoom from "./CurrentRoom";
 import Header from "../components/Header";
 import { Outlet } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Dashboard = () => {
   const [isLeftOpen, setIsLeftOpen] = useState(false);
   const [isRightOpen, setIsRightOpen] = useState(false);
+
+  const { token, user } = useContext(AuthContext);
+  console.log(user);
+  console.log(token);
+  const [activeRoom, setActiveRoom] = useState(user?.roomId);
 
   useEffect(() => {
     const handleResize = () => {

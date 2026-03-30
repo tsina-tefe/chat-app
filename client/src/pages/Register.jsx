@@ -5,7 +5,7 @@ import PasswordInput from "../components/PasswordInput";
 import AuthHeader from "../components/AuthHeader";
 import EncryptionBadge from "../components/EncryptionBadge";
 import Username from "../components/Username";
-import { register } from "../api/authService";
+import { registerService } from "../api/authService";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -35,7 +35,7 @@ const Register = () => {
 
     setLoading(true);
     try {
-      const res = await register(formData);
+      const res = await registerService(formData);
       setMessage(res.message);
       setTimeout(() => {
         setMessage("");

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import EmailInput from "../components/EmailInput";
 import PasswordInput from "../components/PasswordInput";
 import AuthHeader from "../components/AuthHeader";
 import EncryptionBadge from "../components/EncryptionBadge";
-import { login } from "../api/authService";
+import { loginService } from "../api/authService";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const { login, token, user } = useContext(AuthContext);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,7 +28,11 @@ const Login = () => {
 
     setLoading(true);
     try {
-      const res = await login(formData);
+      const res = await loginService(formData);
+      console.log(res);
+      login(res.token, res.user);
+      console.log(token);
+      console.log(user);
       setMessage(res.message);
       setTimeout(() => {
         setMessage("");
