@@ -4,7 +4,12 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Rooms from "./pages/Rooms";
 import NotFound from "./pages/NotFound";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import CurrentRoom from "./pages/CurrentRoom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +28,20 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to={"current-room"} replace />,
+      },
+      {
+        path: "current-room",
+        element: <CurrentRoom />,
+      },
+      {
+        path: "rooms",
+        element: <Rooms />,
+      },
+    ],
   },
 ]);
 

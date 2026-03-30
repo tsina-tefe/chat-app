@@ -3,6 +3,7 @@ import LeftSidebar from "../components/LeftSidebar";
 import RightSidebar from "../components/RightSidebar";
 import CurrentRoom from "./CurrentRoom";
 import Header from "../components/Header";
+import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
   const [isLeftOpen, setIsLeftOpen] = useState(false);
@@ -39,7 +40,7 @@ const Dashboard = () => {
       <main className="flex-1 bg-white rounded-[2.5rem] shadow-sm flex flex-col overflow-hidden border border-white relative">
         <Header setIsLeftOpen={setIsLeftOpen} setIsRightOpen={setIsRightOpen} />
 
-        <CurrentRoom />
+        <Outlet />
       </main>
       <RightSidebar isRightOpen={isRightOpen} closeAll={closeAll} />
     </div>

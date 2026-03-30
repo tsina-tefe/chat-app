@@ -40,11 +40,52 @@ const Rooms = () => {
       icon: <Palette size={20} />,
       bgColor: "bg-purple-50",
     },
+    {
+      id: 4,
+      name: "design-critique",
+      desc: "Visual & UX feedback",
+      icon: <Palette size={20} />,
+      bgColor: "bg-purple-50",
+    },
+    {
+      id: 4,
+      name: "design-critique",
+      desc: "Visual & UX feedback",
+      icon: <Palette size={20} />,
+      bgColor: "bg-purple-50",
+    },
+    {
+      id: 4,
+      name: "design-critique",
+      desc: "Visual & UX feedback",
+      icon: <Palette size={20} />,
+      bgColor: "bg-purple-50",
+    },
+    {
+      id: 4,
+      name: "design-critique",
+      desc: "Visual & UX feedback",
+      icon: <Palette size={20} />,
+      bgColor: "bg-purple-50",
+    },
+    {
+      id: 4,
+      name: "design-critique",
+      desc: "Visual & UX feedback",
+      icon: <Palette size={20} />,
+      bgColor: "bg-purple-50",
+    },
+    {
+      id: 4,
+      name: "design-critique",
+      desc: "Visual & UX feedback",
+      icon: <Palette size={20} />,
+      bgColor: "bg-purple-50",
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-[#fcfbff] p-8 md:p-16 font-sans text-[#4a4658]">
-      {/* --- HEADER --- */}
+    <div className="flex-1 overflow-y-auto h-screen bg-[#fcfbff] flex flex-col p-8 md:p-16 font-sans text-[#4a4658] custom-scrollbar">
       <header className="mb-12 max-w-2xl">
         <h1 className="text-5xl font-bold mb-4 tracking-tight">
           Rooms Explorer
@@ -55,9 +96,7 @@ const Rooms = () => {
         </p>
       </header>
 
-      {/* --- TOP SECTION (Create & Stats) --- */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-        {/* Create New Room Card */}
         <div className="md:col-span-2 bg-white rounded-[3rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-white flex flex-col justify-between">
           <div>
             <h2 className="text-2xl font-bold mb-2">Create New Room</h2>
@@ -83,21 +122,18 @@ const Rooms = () => {
           </div>
         </div>
 
-        {/* Stats Card */}
         <div className="bg-[#e2def2] rounded-[3rem] p-10 flex flex-col justify-between items-start relative overflow-hidden">
-          <TrendingUp size={48} className="text-[#5c586d] opacity-40" />
+          {/* <TrendingUp size={48} className="text-[#5c586d] opacity-40" /> */}
           <div>
             <h3 className="text-5xl font-bold mb-1">124</h3>
             <p className="text-[#5c586d] font-semibold opacity-70">
               Online now
             </p>
           </div>
-          {/* Decorative background shape */}
           <div className="absolute top-[-20%] right-[-20%] w-32 h-32 bg-white/20 rounded-full blur-2xl" />
         </div>
       </div>
 
-      {/* --- ACTIVE ROOMS SECTION --- */}
       <section>
         <div className="flex items-center justify-between mb-8 px-4">
           <h2 className="text-2xl font-bold">Active Rooms</h2>
@@ -106,7 +142,7 @@ const Rooms = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-6">
           {activeRooms.map((room) => (
             <div
               key={room.id}
