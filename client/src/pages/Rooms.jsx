@@ -1,89 +1,24 @@
-import React from "react";
-import {
-  Plus,
-  TrendingUp,
-  Hash,
-  Terminal,
-  PartyPopper,
-  Palette,
-  ArrowRight,
-} from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Hash, ArrowRight } from "lucide-react";
+import { getRooms } from "../api/roomService";
 
 const Rooms = () => {
-  // Mock data for active rooms
-  const activeRooms = [
-    {
-      id: 1,
-      name: "general",
-      desc: "All hands on deck",
-      icon: <Hash size={20} />,
-      bgColor: "bg-gray-100",
-    },
-    {
-      id: 2,
-      name: "tech-talk",
-      desc: "Engineering & R&D",
-      icon: <Terminal size={20} />,
-      bgColor: "bg-indigo-50",
-    },
-    {
-      id: 3,
-      name: "random",
-      desc: "Watercooler & Memes",
-      icon: <PartyPopper size={20} />,
-      bgColor: "bg-orange-50",
-    },
-    {
-      id: 4,
-      name: "design-critique",
-      desc: "Visual & UX feedback",
-      icon: <Palette size={20} />,
-      bgColor: "bg-purple-50",
-    },
-    {
-      id: 4,
-      name: "design-critique",
-      desc: "Visual & UX feedback",
-      icon: <Palette size={20} />,
-      bgColor: "bg-purple-50",
-    },
-    {
-      id: 4,
-      name: "design-critique",
-      desc: "Visual & UX feedback",
-      icon: <Palette size={20} />,
-      bgColor: "bg-purple-50",
-    },
-    {
-      id: 4,
-      name: "design-critique",
-      desc: "Visual & UX feedback",
-      icon: <Palette size={20} />,
-      bgColor: "bg-purple-50",
-    },
-    {
-      id: 4,
-      name: "design-critique",
-      desc: "Visual & UX feedback",
-      icon: <Palette size={20} />,
-      bgColor: "bg-purple-50",
-    },
-    {
-      id: 4,
-      name: "design-critique",
-      desc: "Visual & UX feedback",
-      icon: <Palette size={20} />,
-      bgColor: "bg-purple-50",
-    },
-    {
-      id: 4,
-      name: "design-critique",
-      desc: "Visual & UX feedback",
-      icon: <Palette size={20} />,
-      bgColor: "bg-purple-50",
-    },
-  ];
+  const [rooms, setRooms] = useState([]);
 
+  useEffect(() => {
+    const handleGetRoom = async () => {
+      try {
+        const res = await getRooms();
+        setRooms(res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    handleGetRoom();
+  }, []);
+
+  console.log(rooms);
   return (
     <div className="flex-1 overflow-y-auto h-screen bg-[#fcfbff] flex flex-col p-8 md:p-16 font-sans text-[#4a4658] custom-scrollbar">
       <header className="mb-12 max-w-2xl">
@@ -123,7 +58,6 @@ const Rooms = () => {
         </div>
 
         <div className="bg-[#e2def2] rounded-[3rem] p-10 flex flex-col justify-between items-start relative overflow-hidden">
-          {/* <TrendingUp size={48} className="text-[#5c586d] opacity-40" /> */}
           <div>
             <h3 className="text-5xl font-bold mb-1">124</h3>
             <p className="text-[#5c586d] font-semibold opacity-70">
@@ -143,22 +77,19 @@ const Rooms = () => {
         </div>
 
         <div className=" grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {activeRooms.map((room) => (
+          {rooms.map((room) => (
             <div
               key={room.id}
               className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-white flex items-center justify-between hover:shadow-md transition-shadow group"
             >
               <div className="flex items-center gap-5">
                 <div
-                  className={`w-14 h-14 ${room.bgColor} rounded-full flex items-center justify-center text-[#4a4658]`}
+                  className={`w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center text-[#4a4658]`}
                 >
-                  {room.icon}
+                  <Hash size={20} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg">{room.name}</h4>
-                  <p className="text-xs text-[#8e8ba2] font-medium">
-                    {room.desc}
-                  </p>
+                  <h4 className="font-bold text-lg">{room.room_name}</h4>
                 </div>
               </div>
               <button className="bg-[#edeaf5] text-[#5c586d] px-6 py-2.5 rounded-full font-bold text-sm hover:bg-[#e2def2] transition-all active:scale-95">

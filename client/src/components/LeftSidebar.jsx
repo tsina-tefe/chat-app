@@ -1,20 +1,8 @@
 import React from "react";
 import { MessageSquare, Layers, X } from "lucide-react";
-import { getRooms } from "../api/roomService";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const LeftSidebar = ({ isLeftOpen, closeAll }) => {
-  const navigate = useNavigate();
-
-  const handleGetRoom = async () => {
-    try {
-      const res = await getRooms();
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <aside
       className={`
@@ -44,18 +32,32 @@ const LeftSidebar = ({ isLeftOpen, closeAll }) => {
       </div>
 
       <nav className="flex-1 space-y-2">
-        <button className="w-full flex items-center gap-3 px-4 py-3 bg-[#E2D9F3] text-[#635B70] rounded-2xl font-semibold transition-all">
-          <MessageSquare size={20} /> Current Room
-        </button>
-        <button
-          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/50 rounded-2xl font-semibold transition-all opacity-80"
+        <NavLink
+          className={({ isActive }) => {
+            return isActive
+              ? "w-full flex items-center gap-3 px-4 py-3 bg-[#E2D9F3] text-[#635B70] rounded-2xl font-semibold transition-all"
+              : "w-full flex items-center gap-3 px-4 py-3 hover:bg-white/50 rounded-2xl font-semibold transition-all opacity-80";
+          }}
+          to={"current-room"}
           onClick={() => {
-            handleGetRoom();
-            navigate("rooms");
+            closeAll();
+          }}
+        >
+          <MessageSquare size={20} /> Current Room
+        </NavLink>
+        <NavLink
+          className={({ isActive }) => {
+            return isActive
+              ? "w-full flex items-center gap-3 px-4 py-3 bg-[#E2D9F3] text-[#635B70] rounded-2xl font-semibold transition-all"
+              : "w-full flex items-center gap-3 px-4 py-3 hover:bg-white/50 rounded-2xl font-semibold transition-all opacity-80";
+          }}
+          to={"rooms"}
+          onClick={() => {
+            closeAll();
           }}
         >
           <Layers size={20} /> Rooms
-        </button>
+        </NavLink>
       </nav>
     </aside>
   );
