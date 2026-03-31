@@ -53,8 +53,16 @@ const registerUser = async (req, res) => {
     [name, email, avatarUrl, username, hashedPass],
     (error) => {
       if (error) {
+        console.log(error);
         if (error.code === "ER_DUP_ENTRY") {
-          return res.status(400).json({ message: "Email already in use" });
+          const errMsg = error.message || error.sqlMessage || "";
+          if (errMsg.includes("email")) {
+            return res.status(400).json({ message: "Email already in use" });
+          }
+          if (errMsg.includes("username")) {
+            return res.status(400).json({ message: "Username already taken" });
+          }
+          return res.status(400).json({ message: "Duplicate value detected" });
         }
 
         return res

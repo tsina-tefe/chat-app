@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -33,12 +34,18 @@ const Home = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-4">
-          <button className="px-10 py-4 bg-[#5c586d] text-white rounded-full font-bold text-lg hover:bg-[#4a4658] transition-all shadow-lg hover:shadow-purple-100 active:scale-95">
+          <NavLink
+            className="px-10 py-4 bg-[#5c586d] text-white rounded-full font-bold text-lg hover:bg-[#4a4658] transition-all shadow-lg hover:shadow-purple-100 active:scale-95"
+            to={"register"}
+          >
             Sign Up
-          </button>
-          <button className="px-10 py-4 bg-[#e2def2] text-[#5c586d] rounded-full font-bold text-lg hover:bg-[#d5d0eb] transition-all active:scale-95">
+          </NavLink>
+          <NavLink
+            className="px-10 py-4 bg-[#e2def2] text-[#5c586d] rounded-full font-bold text-lg hover:bg-[#d5d0eb] transition-all active:scale-95"
+            to={"login"}
+          >
             Login to join rooms
-          </button>
+          </NavLink>
         </div>
       </main>
       <footer>

@@ -5,6 +5,7 @@ import AuthHeader from "../components/AuthHeader";
 import EncryptionBadge from "../components/EncryptionBadge";
 import { loginService } from "../api/authService";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -15,9 +16,11 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const { login, token, user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError("");
   };
 
   const handleLogin = async () => {
@@ -29,15 +32,12 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await loginService(formData);
-      console.log(res);
       login(res.token, res.user);
-      console.log(token);
-      console.log(user);
       setMessage(res.message);
       setTimeout(() => {
         setMessage("");
-        //naviagate("/dashboard")
       }, 1000);
+      navigate("/dashboard");
     } catch (error) {
       if (
         error.response &&
