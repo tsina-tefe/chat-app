@@ -48,9 +48,13 @@ const Dashboard = () => {
       <LeftSidebar isLeftOpen={isLeftOpen} closeAll={closeAll} />
 
       <main className="flex-1 bg-white rounded-[2.5rem] shadow-sm flex flex-col overflow-hidden border border-white relative">
-        <Header setIsLeftOpen={setIsLeftOpen} setIsRightOpen={setIsRightOpen} />
+        <Header
+          setIsLeftOpen={setIsLeftOpen}
+          setIsRightOpen={setIsRightOpen}
+          activeRoom={activeRoom}
+        />
 
-        <Outlet />
+        <Outlet context={{ activeRoom }} />
       </main>
       <RightSidebar isRightOpen={isRightOpen} closeAll={closeAll} />
     </div>

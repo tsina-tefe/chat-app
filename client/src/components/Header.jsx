@@ -1,7 +1,7 @@
 import React from "react";
 import { Search, User, Users, LogOut, Menu } from "lucide-react";
 
-const Header = ({ setIsLeftOpen, setIsRightOpen }) => {
+const Header = ({ setIsLeftOpen, setIsRightOpen, activeRoom }) => {
   return (
     <header className="px-6 md:px-8 py-4 flex items-center justify-between border-b border-gray-50">
       <div className="flex items-center gap-4">
@@ -13,7 +13,9 @@ const Header = ({ setIsLeftOpen, setIsRightOpen }) => {
         </button>
 
         <div>
-          <h2 className="font-bold text-lg md:text-xl">#design-critique</h2>
+          <h2 className="font-bold text-lg md:text-xl">
+            {activeRoom ? "#design-critique" : "No Room Joined"}
+          </h2>
           <p className="text-[10px] md:text-xs opacity-50">
             42 participants active
           </p>

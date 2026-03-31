@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Hash, ArrowRight } from "lucide-react";
 import { getRooms } from "../api/roomService";
+import { useOutletContext } from "react-router-dom";
 
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
+  const { activeRoom } = useOutletContext();
+  console.log(activeRoom);
 
   useEffect(() => {
     const handleGetRoom = async () => {
@@ -18,7 +21,6 @@ const Rooms = () => {
     handleGetRoom();
   }, []);
 
-  console.log(rooms);
   return (
     <div className="flex-1 overflow-y-auto h-screen bg-[#fcfbff] flex flex-col p-8 md:p-16 font-sans text-[#4a4658] custom-scrollbar">
       <header className="mb-12 max-w-2xl">
@@ -93,7 +95,7 @@ const Rooms = () => {
                 </div>
               </div>
               <button className="bg-[#edeaf5] text-[#5c586d] px-6 py-2.5 rounded-full font-bold text-sm hover:bg-[#e2def2] transition-all active:scale-95">
-                Join
+                Join{/* if room.is === activeRoom, navigate to currentRoom  */}
               </button>
             </div>
           ))}

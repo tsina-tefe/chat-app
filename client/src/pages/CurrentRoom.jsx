@@ -1,9 +1,35 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import LeftMessage from "../components/LeftMessage";
 import RightMessage from "../components/RightMessage";
 import { Settings, Smile, Send } from "lucide-react";
+import { useOutletContext } from "react-router-dom";
+import { SocketContext } from "../context/SocketContext";
+import { AuthContext } from "../context/AuthContext";
 
 const CurrentRoom = () => {
+  const { activeRoom } = useOutletContext();
+  const [messages, setMessages] = useState([]);
+  const { socket } = useContext(SocketContext);
+  const { user } = useContext(AuthContext);
+
+  console.log(user);
+
+  // console.log(socket);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.emit("get_message_history", { roomId: 1 });
+
+    socket.on("message_history", (data) => {
+      console.log(data);
+      setMessages(data);
+    });
+
+    return () => socket.off("message");
+  }, [socket]);
+
+  console.log(messages);
   return (
     <>
       {/* Messages Feed */}
@@ -13,14 +39,23 @@ const CurrentRoom = () => {
             Jordan joined the room
           </span>
         </div>
-        <LeftMessage />
+        {/* <LeftMessage />
         <RightMessage />
         <RightMessage />
         <RightMessage />
         <LeftMessage />
         <LeftMessage />
         <LeftMessage />
-        <LeftMessage />
+        <LeftMessage /> */}
+
+        {messages.map((message) =>
+          message.userId === user.userId ? (
+            <RightMessage message={message} key={message.id} />
+          ) : (
+            <LeftMessage message={message} key={message.id} />
+          ),
+        )}
+
         <div className="flex items-center gap-2 opacity-50 ml-12">
           <div className="w-8 h-8 rounded-full bg-[#F3F0F7] flex items-center justify-center">
             <Settings size={12} />
