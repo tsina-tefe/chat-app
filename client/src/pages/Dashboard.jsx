@@ -5,17 +5,21 @@ import CurrentRoom from "./CurrentRoom";
 import Header from "../components/Header";
 import { Outlet } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [isLeftOpen, setIsLeftOpen] = useState(false);
   const [isRightOpen, setIsRightOpen] = useState(false);
 
   const { token, user } = useContext(AuthContext);
-  console.log(user);
-  console.log(token);
   const [activeRoom, setActiveRoom] = useState(user?.roomId);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!token) {
+      navigate("login");
+      return;
+    }
     const handleResize = () => {
       if (window.innerWidth >= 1250) {
         setIsLeftOpen(false);

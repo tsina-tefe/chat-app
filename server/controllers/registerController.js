@@ -53,7 +53,6 @@ const registerUser = async (req, res) => {
     [name, email, avatarUrl, username, hashedPass],
     (error) => {
       if (error) {
-        console.log(error);
         if (error.code === "ER_DUP_ENTRY") {
           const errMsg = error.message || error.sqlMessage || "";
           if (errMsg.includes("email")) {
