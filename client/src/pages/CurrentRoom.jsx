@@ -14,9 +14,9 @@ const CurrentRoom = () => {
   const { user } = useContext(AuthContext);
   const [myRoom, setMyRoom] = useState(null);
   const [newMessage, setNewMessage] = useState("");
-
-  // console.log(user);
-  // console.log(messages);
+  const [isTyping, setIsTyping] = useState(false);
+  const [userTyping, setUserTyping] = useState("");
+  let typingTimer;
 
   useEffect(() => {
     if (!socket || !roomId) return;
@@ -34,13 +34,19 @@ const CurrentRoom = () => {
     const handleRecieveMessage = (newMsg) => {
       console.log(newMsg);
       setMessages((prev) => [...prev, newMsg]);
-      console.log(newMsg);
     };
+
+    const handleTyping = ({ userId, username, isTyping }) => {
+      setIsTyping(isTyping);
+      setUserTyping(username);
+    };
+
     socket.emit("get_message_history", { roomId });
 
     socket.on("message_history", handleHistory);
     socket.on("room_joined_success", handleJoinSuccess);
     socket.on("receive_message", handleRecieveMessage);
+    socket.on("user_typing", handleTyping);
 
     return () => {
       socket.off("receive_message", handleRecieveMessage);
@@ -51,16 +57,32 @@ const CurrentRoom = () => {
 
   const handleNewMessage = () => {
     if (!newMessage.trim()) return;
-    console.log(newMessage);
     socket.emit("send_message", {
       content: newMessage,
       roomId,
     });
     setNewMessage("");
+    setIsTyping(false);
   };
 
   const handleChange = (e) => {
     setNewMessage(e.target.value);
+    socket.emit("typing", { roomId, username: user.username, isTyping: true });
+
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => {
+      socket.emit("typing", {
+        roomId,
+        username: user.username,
+        isTyping: false,
+      });
+    }, 2000);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleNewMessage();
+    }
   };
 
   return (
@@ -85,7 +107,9 @@ const CurrentRoom = () => {
           <div className="w-8 h-8 rounded-full bg-[#F3F0F7] flex items-center justify-center">
             <Settings size={12} />
           </div>
-          <p className="text-[10px] font-medium italic">Sarah is typing...</p>
+          <p className="text-[10px] font-medium italic">
+            {isTyping ? `${userTyping}   is typing...` : ""}
+          </p>
         </div>
       </div>
 
@@ -98,6 +122,9 @@ const CurrentRoom = () => {
             placeholder="Send a message..."
             className="flex-1 bg-transparent px-4 md:px-6 py-2 outline-none text-sm"
             onChange={handleChange}
+            onKeyDown={(e) => {
+              handleKeyDown(e);
+            }}
           />
           <button className="p-2 hover:bg-white rounded-full opacity-60">
             <Smile size={20} />

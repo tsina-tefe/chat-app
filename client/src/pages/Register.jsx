@@ -40,8 +40,8 @@ const Register = () => {
       setMessage(res.message);
       setTimeout(() => {
         setMessage("");
-        //naviagate("/login")
-      }, 2000);
+        naviagate("login");
+      }, 1000);
     } catch (error) {
       if (
         error.response &&

@@ -52,9 +52,10 @@ export const messageHandler = (io, socket) => {
     }
   });
 
-  socket.on("typing", ({ roomId, isTyping }) => {
+  socket.on("typing", ({ roomId, username, isTyping }) => {
     socket.to(String(roomId)).emit("user_typing", {
       userId: socket.user.id,
+      username,
       isTyping,
     });
 

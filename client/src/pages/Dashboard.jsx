@@ -21,6 +21,8 @@ const Dashboard = () => {
       return;
     }
 
+    //get room info here
+
     if (
       location.pathname === "/dashboard" ||
       location.pathname === "/dashboard/"
