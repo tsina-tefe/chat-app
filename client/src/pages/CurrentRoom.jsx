@@ -13,41 +13,56 @@ const CurrentRoom = () => {
   const { socket } = useContext(SocketContext);
   const { user } = useContext(AuthContext);
   const [myRoom, setMyRoom] = useState(null);
+  const [newMessage, setNewMessage] = useState("");
 
-  console.log(user);
+  // console.log(user);
+  // console.log(messages);
 
   useEffect(() => {
-    if (!socket) return;
+    if (!socket || !roomId) return;
+
+    socket.emit("join_room", { roomId, userId: user.userId });
 
     const handleHistory = (data) => {
       setMessages(data);
     };
 
     const handleJoinSuccess = (data) => {
-      // setMyRoom(data.roomId);
-      console.log("handle success");
-
-      socket.emit("get_message_history", { roomId: data.roomId });
+      socket.emit("get_message_history", { roomId });
     };
+
+    const handleRecieveMessage = (newMsg) => {
+      console.log(newMsg);
+      setMessages((prev) => [...prev, newMsg]);
+      console.log(newMsg);
+    };
+    socket.emit("get_message_history", { roomId });
 
     socket.on("message_history", handleHistory);
     socket.on("room_joined_success", handleJoinSuccess);
-
-    socket.emit("get_message_history", { roomId });
-    // if (user?.roomId) {
-    //   setMyRoom(user.roomId);
-    //   socket.emit("get_message_history", { roomId: user.roomId });
-    // }
+    socket.on("receive_message", handleRecieveMessage);
 
     return () => {
+      socket.off("receive_message", handleRecieveMessage);
       socket.off("message_history", handleHistory);
       socket.off("room_joined_success", handleJoinSuccess);
     };
-  }, [socket, user]);
+  }, [socket, roomId]);
 
-  // console.log(messages);
-  // console.log(myRoom, " is my room");
-  // console.log(myRoom, " is my new room");
+  const handleNewMessage = () => {
+    if (!newMessage.trim()) return;
+    console.log(newMessage);
+    socket.emit("send_message", {
+      content: newMessage,
+      roomId,
+    });
+    setNewMessage("");
+  };
+
+  const handleChange = (e) => {
+    setNewMessage(e.target.value);
+  };
+
   return (
     <>
       {/* Messages Feed */}
@@ -57,14 +72,6 @@ const CurrentRoom = () => {
             Jordan joined the room
           </span>
         </div>
-        {/* <LeftMessage />
-        <RightMessage />
-        <RightMessage />
-        <RightMessage />
-        <LeftMessage />
-        <LeftMessage />
-        <LeftMessage />
-        <LeftMessage /> */}
 
         {messages.map((message) =>
           message.userId === user.userId ? (
@@ -87,13 +94,20 @@ const CurrentRoom = () => {
         <div className="bg-[#F3F0F7] rounded-[2rem] p-2 flex items-center gap-2">
           <input
             type="text"
+            value={newMessage}
             placeholder="Send a message..."
             className="flex-1 bg-transparent px-4 md:px-6 py-2 outline-none text-sm"
+            onChange={handleChange}
           />
           <button className="p-2 hover:bg-white rounded-full opacity-60">
             <Smile size={20} />
           </button>
-          <button className="bg-[#635B70] text-white p-3 rounded-full shadow-md">
+          <button
+            className="bg-[#635B70] text-white p-3 rounded-full shadow-md"
+            onClick={() => {
+              handleNewMessage();
+            }}
+          >
             <Send size={18} />
           </button>
         </div>

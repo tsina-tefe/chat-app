@@ -30,7 +30,7 @@ export const leaveRoom = (io, socket) => {
         ]);
 
       // SOCKET LEAVE: Physically remove them from the socket room
-      socket.leave(roomId);
+      socket.leave(String(roomId));
 
       socket.to(roomId).emit("user_left", {
         userId: userId,

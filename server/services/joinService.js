@@ -20,9 +20,9 @@ export const joinRoom = (io, socket) => {
       const user = users[0];
       const previousRoomId = user.current_room_id;
 
-      // LEAVE PREVIOUS ROOM (If they were in one and it's different)
+      // LEAVE PREVIOUS ROOM
       if (previousRoomId && previousRoomId !== roomId) {
-        socket.leave(previousRoomId);
+        socket.leave(String(previousRoomId));
 
         socket.to(previousRoomId).emit("user_left", {
           userId: userId,
@@ -40,9 +40,9 @@ export const joinRoom = (io, socket) => {
         ]);
 
       // JOIN NEW ROOM
-      socket.join(roomId);
+      socket.join(String(roomId));
 
-      socket.to(roomId).emit("user_joined", {
+      socket.to(String(roomId)).emit("user_joined", {
         user: {
           id: userId,
           name: user.username,

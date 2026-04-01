@@ -44,6 +44,7 @@ const Rooms = () => {
   }, [socket, navigate]);
 
   const handleJoinRoom = (roomId) => {
+    console.log(typeof roomId);
     socket.emit("join_room", { roomId, userId: user.userId });
   };
 

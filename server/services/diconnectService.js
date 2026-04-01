@@ -26,7 +26,7 @@ export const disconnectHandler = (io, socket) => {
               userId,
             ]);
 
-          socket.to(roomId).emit("user_left", {
+          socket.to(String(roomId)).emit("user_left", {
             userId: userId,
             message: buildMsg(ADMIN, `${userName} has disconnected`),
           });
