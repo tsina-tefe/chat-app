@@ -13,6 +13,9 @@ export const SocketProvider = ({ children }) => {
       const newSocket = io("http://localhost:3500", {
         auth: { token },
         transports: ["websocket"],
+        reconnectionAttempts: 5, // Stop trying after 5 failed attempts
+        reconnectionDelay: 5000, // Wait 5 seconds between each try (instead of 1s)
+        timeout: 20000,
       });
 
       setSocket(newSocket);

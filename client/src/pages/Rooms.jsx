@@ -1,14 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Hash, ArrowRight } from "lucide-react";
 import { getRooms } from "../api/roomService";
-import { useOutletContext } from "react-router-dom";
+import { data, useNavigate, useOutletContext } from "react-router-dom";
+import { SocketContext } from "../context/SocketContext";
+import { AuthContext } from "../context/AuthContext";
 
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
   const { activeRoom } = useOutletContext();
-  console.log(activeRoom);
+  const { socket } = useContext(SocketContext);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  // console.log(activeRoom);
+  // console.log(socket);
+  // console.log(user);
 
   useEffect(() => {
+    if (!socket) return;
+
     const handleGetRoom = async () => {
       try {
         const res = await getRooms();
@@ -17,9 +26,26 @@ const Rooms = () => {
         console.log(error);
       }
     };
-
     handleGetRoom();
-  }, []);
+
+    const handleSuccess = () => {
+      navigate("/dashboard/current-room");
+    };
+
+    socket.on("room_joined_success", handleSuccess);
+    socket.on("error", (data) => {
+      console.log(data);
+    });
+
+    return () => {
+      socket.off("room_joined_success", handleSuccess);
+      socket.off("error");
+    };
+  }, [socket, navigate]);
+
+  const handleJoinRoom = (roomId) => {
+    socket.emit("join_room", { roomId, userId: user.userId });
+  };
 
   return (
     <div className="flex-1 overflow-y-auto h-screen bg-[#fcfbff] flex flex-col p-8 md:p-16 font-sans text-[#4a4658] custom-scrollbar">
@@ -94,7 +120,13 @@ const Rooms = () => {
                   <h4 className="font-bold text-lg">{room.room_name}</h4>
                 </div>
               </div>
-              <button className="bg-[#edeaf5] text-[#5c586d] px-6 py-2.5 rounded-full font-bold text-sm hover:bg-[#e2def2] transition-all active:scale-95">
+              <button
+                className="bg-[#edeaf5] text-[#5c586d] px-6 py-2.5 rounded-full font-bold text-sm hover:bg-[#e2def2] transition-all active:scale-95"
+                onClick={() => {
+                  console.log("join room ", room.room_name, room.id);
+                  handleJoinRoom(room.id);
+                }}
+              >
                 Join{/* if room.is === activeRoom, navigate to currentRoom  */}
               </button>
             </div>

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import LeftMessage from "../components/LeftMessage";
 import RightMessage from "../components/RightMessage";
 import { Settings, Smile, Send } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
+import { data, useOutletContext } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
 import { AuthContext } from "../context/AuthContext";
 
@@ -11,25 +11,41 @@ const CurrentRoom = () => {
   const [messages, setMessages] = useState([]);
   const { socket } = useContext(SocketContext);
   const { user } = useContext(AuthContext);
+  const [myRoom, setMyRoom] = useState(null);
 
   console.log(user);
-
-  // console.log(socket);
 
   useEffect(() => {
     if (!socket) return;
 
-    socket.emit("get_message_history", { roomId: 1 });
-
-    socket.on("message_history", (data) => {
-      console.log(data);
+    const handleHistory = (data) => {
       setMessages(data);
-    });
+    };
 
-    return () => socket.off("message");
-  }, [socket]);
+    const handleJoinSuccess = (data) => {
+      setMyRoom(data.roomId);
+      console.log("handle success");
 
-  console.log(messages);
+      socket.emit("get_message_history", { roomId: data.roomId });
+    };
+
+    socket.on("message_history", handleHistory);
+    socket.on("room_joined_success", handleJoinSuccess);
+
+    if (user?.roomId) {
+      setMyRoom(user.roomId);
+      socket.emit("get_message_history", { roomId: user.roomId });
+    }
+
+    return () => {
+      socket.off("message_history", handleHistory);
+      socket.off("room_joined_success", handleJoinSuccess);
+    };
+  }, [socket, user]);
+
+  // console.log(messages);
+  // console.log(myRoom, " is my room");
+  // console.log(myRoom, " is my new room");
   return (
     <>
       {/* Messages Feed */}
