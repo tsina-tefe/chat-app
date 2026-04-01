@@ -31,10 +31,10 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to={"current-room"} replace />,
+        element: <Navigate to={"rooms"} replace />,
       },
       {
-        path: "current-room",
+        path: "room/:roomId",
         element: <CurrentRoom />,
       },
       {

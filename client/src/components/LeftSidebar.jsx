@@ -2,7 +2,7 @@ import React from "react";
 import { MessageSquare, Layers, X } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
-const LeftSidebar = ({ isLeftOpen, closeAll }) => {
+const LeftSidebar = ({ isLeftOpen, closeAll, activeRoom }) => {
   return (
     <aside
       className={`
@@ -38,7 +38,7 @@ const LeftSidebar = ({ isLeftOpen, closeAll }) => {
               ? "w-full flex items-center gap-3 px-4 py-3 bg-[#E2D9F3] text-[#635B70] rounded-2xl font-semibold transition-all"
               : "w-full flex items-center gap-3 px-4 py-3 hover:bg-white/50 rounded-2xl font-semibold transition-all opacity-80";
           }}
-          to={"current-room"}
+          to={`room/${activeRoom}`}
           onClick={() => {
             closeAll();
           }}

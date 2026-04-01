@@ -20,6 +20,18 @@ const Dashboard = () => {
       navigate("login");
       return;
     }
+
+    if (
+      location.pathname === "/dashboard" ||
+      location.pathname === "/dashboard/"
+    ) {
+      if (user?.roomId) {
+        navigate(`room/${user.roomId}`, { replace: true });
+      } else {
+        navigate("rooms", { replace: true });
+      }
+    }
+
     const handleResize = () => {
       if (window.innerWidth >= 1250) {
         setIsLeftOpen(false);
@@ -28,7 +40,7 @@ const Dashboard = () => {
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [user, navigate, location]);
 
   const closeAll = () => {
     setIsLeftOpen(false);
@@ -45,7 +57,11 @@ const Dashboard = () => {
       )}
 
       {/* --- LEFT SIDEBAR (Navigation) --- */}
-      <LeftSidebar isLeftOpen={isLeftOpen} closeAll={closeAll} />
+      <LeftSidebar
+        isLeftOpen={isLeftOpen}
+        closeAll={closeAll}
+        activeRoom={activeRoom}
+      />
 
       <main className="flex-1 bg-white rounded-[2.5rem] shadow-sm flex flex-col overflow-hidden border border-white relative">
         <Header

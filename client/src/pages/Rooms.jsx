@@ -28,8 +28,8 @@ const Rooms = () => {
     };
     handleGetRoom();
 
-    const handleSuccess = () => {
-      navigate("/dashboard/current-room");
+    const handleSuccess = (data) => {
+      navigate("/dashboard/room/" + data.roomId);
     };
 
     socket.on("room_joined_success", handleSuccess);
