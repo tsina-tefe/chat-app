@@ -98,7 +98,11 @@ const Dashboard = () => {
 
         <Outlet context={{ activeRoom, handleSetActiveRoom }} />
       </main>
-      <RightSidebar isRightOpen={isRightOpen} closeAll={closeAll} />
+      <RightSidebar
+        isRightOpen={isRightOpen}
+        closeAll={closeAll}
+        roomDetails={roomDetails}
+      />
     </div>
   );
 };

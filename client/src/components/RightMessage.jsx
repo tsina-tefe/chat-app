@@ -1,12 +1,15 @@
 import React from "react";
 import { formatTime } from "../utils/formatTime";
-import { Icon } from "lucide-react";
 
 const RightMessage = ({ message }) => {
   return (
     <div className="flex gap-4 max-w-2xl ml-auto flex-row-reverse p-3">
       <div className="w-10 h-10 rounded-full bg-[#D9D7E0] flex items-center justify-center text-[10px] font-bold text-[#635B70] flex-shrink-0 self-end">
-        <img className="rounded-full" src={message.avatar} alt="profile icon" />
+        <img
+          className="rounded-full"
+          src={message.avatar}
+          alt={message.username.slice(0, 2).toUpperCase()}
+        />
       </div>
       <div className="space-y-1 text-right">
         <p className="text-[10px] font-bold mr-2 opacity-40 uppercase">

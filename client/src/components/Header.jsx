@@ -14,11 +14,11 @@ const Header = ({ setIsLeftOpen, setIsRightOpen, activeRoom, roomDetails }) => {
 
         <div>
           <h2 className="font-bold text-lg md:text-xl">
-            {roomDetails ? roomDetails.roomName : "No Room Joined"}
+            {roomDetails.roomName ? roomDetails.roomName : "No Room Joined"}
           </h2>
           <p className="text-[10px] md:text-xs opacity-50">
-            {roomDetails
-              ? `${roomDetails.participants?.length} Participants active`
+            {roomDetails.participants
+              ? `${roomDetails.participants.length} Participants active`
               : ""}
           </p>
         </div>

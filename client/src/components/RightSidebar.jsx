@@ -1,7 +1,7 @@
 import React from "react";
 import { X } from "lucide-react";
 
-const RightSidebar = ({ isRightOpen, closeAll }) => {
+const RightSidebar = ({ isRightOpen, closeAll, roomDetails }) => {
   return (
     <aside
       className={`
@@ -23,22 +23,30 @@ const RightSidebar = ({ isRightOpen, closeAll }) => {
       </div>
 
       <div className="space-y-6">
-        <p className="text-[10px] font-bold opacity-30">ONLINE — 4</p>
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <img
-              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
-              className="w-10 h-10 rounded-full bg-teal-100"
-              alt="Sarah"
-            />
-            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#F3F0F7] rounded-full"></div>
-          </div>
-          <div>
-            <p className="text-sm font-bold">Sarah Jenkins</p>
-            <p className="text-[10px] opacity-50">Lead Designer</p>
-          </div>
-        </div>
-        {/* ... [Other Participants] ... */}
+        <p className="text-[10px] font-bold opacity-30">
+          ONLINE —{" "}
+          {roomDetails.participants
+            ? `${roomDetails.participants.length}`
+            : "0"}
+        </p>
+        {roomDetails.participants
+          ? roomDetails.participants.map((p) => (
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <img
+                    src={p.avatar}
+                    className="w-10 h-10 rounded-full bg-teal-100"
+                    alt={p.username.slice(0, 2).toUpperCase()}
+                  />
+                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#F3F0F7] rounded-full"></div>
+                </div>
+                <div>
+                  <p className="text-sm font-bold">{p.name}</p>
+                  <p className="text-[10px] opacity-50">{p.username}</p>
+                </div>
+              </div>
+            ))
+          : ""}
       </div>
     </aside>
   );
