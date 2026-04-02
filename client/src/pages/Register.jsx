@@ -6,6 +6,7 @@ import AuthHeader from "../components/AuthHeader";
 import EncryptionBadge from "../components/EncryptionBadge";
 import Username from "../components/Username";
 import { registerService } from "../api/authService";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const Register = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -40,7 +42,7 @@ const Register = () => {
       setMessage(res.message);
       setTimeout(() => {
         setMessage("");
-        naviagate("login");
+        navigate("/login");
       }, 1000);
     } catch (error) {
       if (

@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import { Outlet } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { getRoomInfo } from "../api/roomInfoService";
 
 const Dashboard = () => {
   const [isLeftOpen, setIsLeftOpen] = useState(false);
@@ -13,15 +14,15 @@ const Dashboard = () => {
 
   const { token, user } = useContext(AuthContext);
   const [activeRoom, setActiveRoom] = useState(user?.roomId);
+  const [roomDetails, setRoomDetails] = useState([]);
   const navigate = useNavigate();
 
+  // redirect effect
   useEffect(() => {
     if (!token) {
       navigate("login");
       return;
     }
-
-    //get room info here
 
     if (
       location.pathname === "/dashboard" ||
@@ -33,7 +34,26 @@ const Dashboard = () => {
         navigate("rooms", { replace: true });
       }
     }
+  }, [token, user, location.pathname, navigate]);
 
+  // fetch details
+  useEffect(() => {
+    if (!token || !activeRoom) return;
+
+    const fetchDetails = async () => {
+      try {
+        const res = await getRoomInfo(activeRoom);
+        setRoomDetails(res);
+      } catch (error) {
+        console.error("Fetch error:", error);
+      }
+    };
+
+    fetchDetails();
+  }, [activeRoom, token]);
+
+  // resize effect
+  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1250) {
         setIsLeftOpen(false);
@@ -42,11 +62,15 @@ const Dashboard = () => {
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [user, navigate, location]);
+  }, []);
 
   const closeAll = () => {
     setIsLeftOpen(false);
     setIsRightOpen(false);
+  };
+
+  const handleSetActiveRoom = (newRoomId) => {
+    setActiveRoom(newRoomId);
   };
 
   return (
@@ -58,7 +82,6 @@ const Dashboard = () => {
         />
       )}
 
-      {/* --- LEFT SIDEBAR (Navigation) --- */}
       <LeftSidebar
         isLeftOpen={isLeftOpen}
         closeAll={closeAll}
@@ -70,9 +93,10 @@ const Dashboard = () => {
           setIsLeftOpen={setIsLeftOpen}
           setIsRightOpen={setIsRightOpen}
           activeRoom={activeRoom}
+          roomDetails={roomDetails}
         />
 
-        <Outlet context={{ activeRoom }} />
+        <Outlet context={{ activeRoom, handleSetActiveRoom }} />
       </main>
       <RightSidebar isRightOpen={isRightOpen} closeAll={closeAll} />
     </div>

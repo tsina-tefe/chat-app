@@ -5,7 +5,10 @@ const ADMIN = "Admin";
 
 export const joinRoom = (io, socket) => {
   socket.on("join_room", async (data) => {
-    const { roomId, userId } = data;
+    let { roomId, userId } = data;
+    if (roomId === "null") {
+      roomId = null;
+    }
 
     try {
       // Fetch User and their PREVIOUS room from DB

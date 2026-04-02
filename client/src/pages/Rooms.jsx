@@ -7,13 +7,10 @@ import { AuthContext } from "../context/AuthContext";
 
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
-  const { activeRoom } = useOutletContext();
+  const { activeRoom, handleSetActiveRoom } = useOutletContext();
   const { socket } = useContext(SocketContext);
-  const { user } = useContext(AuthContext);
+  const { user, updateUserRoom } = useContext(AuthContext);
   const navigate = useNavigate();
-  // console.log(activeRoom);
-  // console.log(socket);
-  // console.log(user);
 
   useEffect(() => {
     if (!socket) return;
@@ -44,7 +41,8 @@ const Rooms = () => {
   }, [socket, navigate]);
 
   const handleJoinRoom = (roomId) => {
-    console.log(typeof roomId);
+    handleSetActiveRoom(roomId);
+    updateUserRoom(roomId);
     socket.emit("join_room", { roomId, userId: user.userId });
   };
 

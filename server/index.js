@@ -7,6 +7,7 @@ import login from "./routes/login.js";
 import { initSocket } from "./socket/socket.js";
 import room from "./routes/room.js";
 import authenticateToken from "./middleware/authenticateToken.js";
+import roomInfo from "./routes/room-info.js";
 
 dotenv.config();
 
@@ -42,6 +43,8 @@ app.use("/api/register", register);
 app.use("/api/login", login);
 
 app.use("/api/room", authenticateToken, room);
+
+app.use("/api/room-info", authenticateToken, roomInfo);
 
 app.use((err, req, res, next) => {
   console.error("Error:", err);
