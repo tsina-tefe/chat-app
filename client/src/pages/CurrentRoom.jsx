@@ -19,7 +19,7 @@ const CurrentRoom = () => {
   let typingTimer;
 
   useEffect(() => {
-    if (!socket || !roomId) return;
+    if (!socket || !roomId || !user) return;
 
     socket.emit("join_room", { roomId, userId: user.userId });
 
@@ -96,7 +96,7 @@ const CurrentRoom = () => {
         </div>
 
         {messages.map((message) =>
-          message.userId === user.userId ? (
+          message.userId === user?.userId ? (
             <RightMessage message={message} key={message.id} />
           ) : (
             <LeftMessage message={message} key={message.id} />

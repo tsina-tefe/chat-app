@@ -37,7 +37,11 @@ const Login = () => {
       setTimeout(() => {
         setMessage("");
       }, 1000);
-      navigate("/dashboard/room/" + res.user.roomId);
+      if (!res.user.roomId) {
+        navigate("/dashboard/rooms");
+      } else {
+        navigate("/dashboard/room/" + res.user.roomId);
+      }
     } catch (error) {
       if (
         error.response &&

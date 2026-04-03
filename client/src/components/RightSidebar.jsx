@@ -31,7 +31,7 @@ const RightSidebar = ({ isRightOpen, closeAll, roomDetails }) => {
         </p>
         {roomDetails.participants
           ? roomDetails.participants.map((p) => (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3" key={p.id}>
                 <div className="relative">
                   <img
                     src={p.avatar}

@@ -53,7 +53,8 @@ const loginController = (req, res) => {
       message: "Login Successful",
       user: {
         userId: user.id,
-        name: user.name,
+        name: user.full_name,
+        avatar: user.avatar,
         email: user.email,
         username: user.username,
         roomId: user.current_room_id,

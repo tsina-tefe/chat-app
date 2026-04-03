@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Search, User, Users, LogOut, Menu } from "lucide-react";
+import { AuthContext } from "../context/AuthContext";
+import UserMenu from "./UserMenu";
 
 const Header = ({ setIsLeftOpen, setIsRightOpen, activeRoom, roomDetails }) => {
+  const { user } = useContext(AuthContext);
   return (
     <header className="px-6 md:px-8 py-4 flex items-center justify-between border-b border-gray-50">
       <div className="flex items-center gap-4">
@@ -47,10 +50,9 @@ const Header = ({ setIsLeftOpen, setIsRightOpen, activeRoom, roomDetails }) => {
           </span>
         </button>
 
-        <div className="p-2 bg-[#F3F0F7] rounded-full cursor-pointer hidden sm:block">
-          <User size={18} />
-        </div>
+        <UserMenu />
 
+        {/* hadle leave room */}
         <button className="flex items-center gap-2 px-3 py-2 bg-[#F5E1E9] text-[#A64D79] rounded-full text-[10px] md:text-sm font-bold hover:bg-[#f0d1de]">
           <LogOut size={16} /> <span className="hidden lg:inline">Leave</span>
         </button>
