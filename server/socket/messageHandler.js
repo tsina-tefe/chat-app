@@ -4,6 +4,7 @@ export const messageHandler = (io, socket) => {
   socket.on("send_message", async (data) => {
     const { content, roomId } = data;
     const userId = socket.user.userId;
+    console.log(userId);
 
     try {
       const [result] = await db

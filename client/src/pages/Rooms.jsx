@@ -25,17 +25,17 @@ const Rooms = () => {
     };
     handleGetRoom();
 
-    const handleSuccess = (data) => {
-      navigate("/dashboard/room/" + data.roomId);
-    };
+    // const handleSuccess = (data) => {
+    //   navigate("/dashboard/room/" + data.roomId);
+    // };
 
-    socket.on("room_joined_success", handleSuccess);
+    // socket.on("room_joined_success", handleSuccess);
     socket.on("error", (data) => {
       console.log(data);
     });
 
     return () => {
-      socket.off("room_joined_success", handleSuccess);
+      // socket.off("room_joined_success", handleSuccess);
       socket.off("error");
     };
   }, [socket, navigate]);
@@ -43,7 +43,8 @@ const Rooms = () => {
   const handleJoinRoom = (roomId) => {
     handleSetActiveRoom(roomId);
     updateUserRoom(roomId);
-    socket.emit("join_room", { roomId, userId: user.userId });
+    // socket.emit("join_room", { roomId, userId: user.userId });
+    navigate("/dashboard/room/" + roomId);
   };
 
   return (

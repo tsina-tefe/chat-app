@@ -44,6 +44,10 @@ const CurrentRoom = () => {
       console.log(data);
     };
 
+    const handleUserJoin = (data) => {
+      console.log(data);
+    };
+
     socket.emit("get_message_history", { roomId });
 
     socket.on("message_history", handleHistory);
@@ -51,6 +55,7 @@ const CurrentRoom = () => {
     socket.on("receive_message", handleRecieveMessage);
     socket.on("user_typing", handleTyping);
     socket.on("user_left", handleUserLeave);
+    socket.on("user_joined", handleUserJoin);
 
     return () => {
       socket.off("receive_message", handleRecieveMessage);
