@@ -32,7 +32,6 @@ const CurrentRoom = () => {
     };
 
     const handleRecieveMessage = (newMsg) => {
-      console.log(newMsg);
       setMessages((prev) => [...prev, newMsg]);
     };
 
@@ -41,12 +40,17 @@ const CurrentRoom = () => {
       setUserTyping(username);
     };
 
+    const handleUserLeave = (data) => {
+      console.log(data);
+    };
+
     socket.emit("get_message_history", { roomId });
 
     socket.on("message_history", handleHistory);
     socket.on("room_joined_success", handleJoinSuccess);
     socket.on("receive_message", handleRecieveMessage);
     socket.on("user_typing", handleTyping);
+    socket.on("user_left", handleUserLeave);
 
     return () => {
       socket.off("receive_message", handleRecieveMessage);

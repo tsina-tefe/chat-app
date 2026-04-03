@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import LeftSidebar from "../components/LeftSidebar";
 import RightSidebar from "../components/RightSidebar";
-import CurrentRoom from "./CurrentRoom";
 import Header from "../components/Header";
 import { Outlet } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -38,11 +37,13 @@ const Dashboard = () => {
 
   // fetch details
   useEffect(() => {
-    if (!token || !activeRoom) return;
-
+    if (!token || !user?.roomId) {
+      setRoomDetails([]);
+      return;
+    }
     const fetchDetails = async () => {
       try {
-        const res = await getRoomInfo(activeRoom);
+        const res = await getRoomInfo(user.roomId);
         setRoomDetails(res);
       } catch (error) {
         console.error("Fetch error:", error);
@@ -50,7 +51,7 @@ const Dashboard = () => {
     };
 
     fetchDetails();
-  }, [activeRoom, token]);
+  }, [activeRoom, token, user]);
 
   // resize effect
   useEffect(() => {

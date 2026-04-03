@@ -27,9 +27,9 @@ export const joinRoom = (io, socket) => {
       if (previousRoomId && previousRoomId !== roomId) {
         socket.leave(String(previousRoomId));
 
-        socket.to(previousRoomId).emit("user_left", {
+        socket.to(String(previousRoomId)).emit("user_left", {
           userId: userId,
-          message: buildMsg(ADMIN, `${user.name} has left the room`),
+          message: buildMsg(ADMIN, `${user.username} has left the room`),
         });
 
         console.log(`User ${userId} left room: ${previousRoomId}`);

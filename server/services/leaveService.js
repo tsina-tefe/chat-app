@@ -5,8 +5,8 @@ const ADMIN = "Admin";
 
 export const leaveRoom = (io, socket) => {
   socket.on("leave_room", async () => {
-    const userId = socket.user.id;
-
+    const userId = socket.user.userId;
+    console.log(userId);
     try {
       const [users] = await db
         .promise()
@@ -21,6 +21,8 @@ export const leaveRoom = (io, socket) => {
 
       const roomId = users[0].current_room_id;
       const userName = users[0].username;
+      console.log(roomId);
+      console.log(userName);
 
       // UPDATE DATABASE: Set room to NULL
       await db
@@ -32,7 +34,7 @@ export const leaveRoom = (io, socket) => {
       // SOCKET LEAVE: Physically remove them from the socket room
       socket.leave(String(roomId));
 
-      socket.to(roomId).emit("user_left", {
+      socket.to(String(roomId)).emit("user_left", {
         userId: userId,
         message: buildMsg(ADMIN, `${userName} has left the room`),
       });
