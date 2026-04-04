@@ -2,22 +2,19 @@ import React, { useContext, useEffect, useState } from "react";
 import LeftMessage from "../components/LeftMessage";
 import RightMessage from "../components/RightMessage";
 import { Settings, Smile, Send } from "lucide-react";
-import { data, useOutletContext, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
 import { AuthContext } from "../context/AuthContext";
-import { notifyPresence } from "../utils/notifications";
+import { notifyPresence, notifyError } from "../utils/notifications";
 
 const CurrentRoom = () => {
   const { roomId } = useParams();
-  const { activeRoom } = useOutletContext();
   const [messages, setMessages] = useState([]);
   const { socket } = useContext(SocketContext);
   const { user } = useContext(AuthContext);
-  const [myRoom, setMyRoom] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [userTyping, setUserTyping] = useState("");
-  const [userJoined, setUserJoined] = useState("");
   let typingTimer;
 
   useEffect(() => {
@@ -27,10 +24,6 @@ const CurrentRoom = () => {
 
     const handleHistory = (data) => {
       setMessages(data);
-    };
-
-    const handleJoinSuccess = (data) => {
-      socket.emit("get_message_history", { roomId });
     };
 
     const handleRecieveMessage = (newMsg) => {
@@ -44,27 +37,37 @@ const CurrentRoom = () => {
 
     const handleUserLeave = (data) => {
       console.log(data);
-      notifyPresence(data.user, "leave");
+      notifyPresence(data, "leave");
     };
 
     const handleUserJoin = (data) => {
       console.log(data);
-      notifyPresence(data.user, "join");
+      notifyPresence(data, "join");
+    };
+
+    const handleError = (data) => {
+      console.log(data);
+      notifyError(data.message);
+    };
+
+    const handleUserDisconnected = (data) => {
+      console.log(data);
+      notifyPresence(data, "disconnect");
     };
 
     socket.emit("get_message_history", { roomId });
 
     socket.on("message_history", handleHistory);
-    socket.on("room_joined_success", handleJoinSuccess);
     socket.on("receive_message", handleRecieveMessage);
     socket.on("user_typing", handleTyping);
     socket.on("user_left", handleUserLeave);
     socket.on("user_joined", handleUserJoin);
+    socket.on("error", handleError);
+    socket.on("user_disconnected", handleUserDisconnected);
 
     return () => {
       socket.off("receive_message", handleRecieveMessage);
       socket.off("message_history", handleHistory);
-      socket.off("room_joined_success", handleJoinSuccess);
     };
   }, [socket, roomId]);
 

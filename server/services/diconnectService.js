@@ -18,7 +18,8 @@ export const disconnectHandler = (io, socket) => {
           .query("SELECT username FROM users WHERE id = ?", [userId]);
 
         if (users.length > 0) {
-          const userName = users[0].username;
+          const user = users[0];
+          const userName = user.username;
 
           await db
             .promise()
@@ -26,8 +27,12 @@ export const disconnectHandler = (io, socket) => {
               userId,
             ]);
 
-          socket.to(String(roomId)).emit("user_left", {
-            userId: userId,
+          socket.to(String(roomId)).emit("user_disconnected", {
+            user: {
+              id: userId,
+              username: user.username,
+              avatar: user.avatar,
+            },
             message: buildMsg(ADMIN, `${userName} has disconnected`),
           });
 

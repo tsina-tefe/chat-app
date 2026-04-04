@@ -4,7 +4,6 @@ export const messageHandler = (io, socket) => {
   socket.on("send_message", async (data) => {
     const { content, roomId } = data;
     const userId = socket.user.userId;
-    console.log(userId);
 
     try {
       const [result] = await db
@@ -28,7 +27,6 @@ export const messageHandler = (io, socket) => {
         avatar: users[0].avatar,
       };
       io.to(String(roomId)).emit("receive_message", newMessage);
-      // socket.emit("receive_message", newMessage); // delete, don't send to the user
     } catch (error) {
       console.error("Error sending message:", error);
       socket.emit("error", { message: "Failed to send message" });
@@ -59,10 +57,5 @@ export const messageHandler = (io, socket) => {
       username,
       isTyping,
     });
-
-    // socket.emit("user_typing", {
-    //   userId: socket.user.id,
-    //   isTyping,
-    // }); // delete, expermental
   });
 };

@@ -23,23 +23,6 @@ export const joinRoom = (io, socket) => {
       const user = users[0];
       const previousRoomId = user.current_room_id;
 
-      // // if already joined the room
-      // if (
-      //   String(previousRoomId) === String(roomId) &&
-      //   socket.rooms.has(String(roomId))
-      // ) {
-      //   const [activeUsers] = await db
-      //     .promise()
-      //     .query(
-      //       "SELECT id, username, avatar FROM users WHERE current_room_id = ?",
-      //       [roomId],
-      //     );
-      //   socket.emit("update_user_list", activeUsers);
-      //   return socket.emit("room_joined_success", { roomId });
-      // }
-      console.log("prev ", previousRoomId);
-      console.log("prev once");
-
       // LEAVE PREVIOUS ROOM
       if (previousRoomId && previousRoomId !== roomId) {
         socket.leave(String(previousRoomId));
@@ -86,9 +69,11 @@ export const joinRoom = (io, socket) => {
         roomId: roomId,
         message: buildMsg(ADMIN, `You are now in ${roomId}`),
       });
+
+      socket.emit("error", { message: "Could not join room" });
     } catch (error) {
       console.error("Socket Join Error:", error);
-      socket.emit("error", { message: buildMsg(ADMIN, "Could not join room") });
+      socket.emit("error", { message: "Could not join room" });
     }
   });
 };

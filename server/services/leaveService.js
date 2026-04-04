@@ -6,7 +6,6 @@ const ADMIN = "Admin";
 export const leaveRoom = (io, socket) => {
   socket.on("leave_room", async () => {
     const userId = socket.user.userId;
-    // console.log(userId);
     try {
       const [users] = await db
         .promise()
@@ -24,7 +23,7 @@ export const leaveRoom = (io, socket) => {
       const roomId = user.current_room_id;
       const userName = user.username;
 
-      // UPDATE DATABASE: Set room to NULL
+      // UPDATE DATABASE
       await db
         .promise()
         .query("UPDATE users SET current_room_id = NULL WHERE id = ?", [
@@ -33,7 +32,6 @@ export const leaveRoom = (io, socket) => {
 
       // SOCKET LEAVE
       socket.leave(String(roomId));
-      console.log(roomId);
 
       socket.to(String(roomId)).emit("user_left", {
         user: {
@@ -53,7 +51,7 @@ export const leaveRoom = (io, socket) => {
     } catch (error) {
       console.error("Leave Room Error:", error);
       socket.emit("error", {
-        message: buildMsg(ADMIN, "Error while leaving the room"),
+        message: "Error while leaving the room",
       });
     }
   });
