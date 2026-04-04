@@ -10,6 +10,7 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
+import { Toaster } from "sonner";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
+      <Toaster position="top-center" expand={true} richColors />
       <RouterProvider router={router} />
     </>
   );

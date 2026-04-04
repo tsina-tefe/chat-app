@@ -5,6 +5,7 @@ import { Settings, Smile, Send } from "lucide-react";
 import { data, useOutletContext, useParams } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
 import { AuthContext } from "../context/AuthContext";
+import { notifyPresence } from "../utils/notifications";
 
 const CurrentRoom = () => {
   const { roomId } = useParams();
@@ -16,6 +17,7 @@ const CurrentRoom = () => {
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [userTyping, setUserTyping] = useState("");
+  const [userJoined, setUserJoined] = useState("");
   let typingTimer;
 
   useEffect(() => {
@@ -42,10 +44,12 @@ const CurrentRoom = () => {
 
     const handleUserLeave = (data) => {
       console.log(data);
+      notifyPresence(data.user, "leave");
     };
 
     const handleUserJoin = (data) => {
       console.log(data);
+      notifyPresence(data.user, "join");
     };
 
     socket.emit("get_message_history", { roomId });

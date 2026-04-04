@@ -46,6 +46,7 @@ export const joinRoom = (io, socket) => {
 
         socket.to(String(previousRoomId)).emit("user_left", {
           userId: userId,
+          username: user.username,
           message: buildMsg(ADMIN, `${user.username} has left the room`),
         });
 
@@ -65,7 +66,7 @@ export const joinRoom = (io, socket) => {
       socket.to(String(roomId)).emit("user_joined", {
         user: {
           id: userId,
-          name: user.username,
+          username: user.username,
           avatar: user.avatar,
         },
         message: buildMsg(ADMIN, `${user.username} has joined the room`),

@@ -10,17 +10,19 @@ export const leaveRoom = (io, socket) => {
     try {
       const [users] = await db
         .promise()
-        .query("SELECT username, current_room_id FROM users WHERE id = ?", [
-          userId,
-        ]);
+        .query(
+          "SELECT username, current_room_id, avatar FROM users WHERE id = ?",
+          [userId],
+        );
 
       if (users.length === 0 || !users[0].current_room_id) {
         console.log("user not in any room");
         return;
       }
 
-      const roomId = users[0].current_room_id;
-      const userName = users[0].username;
+      const user = users[0];
+      const roomId = user.current_room_id;
+      const userName = user.username;
 
       // UPDATE DATABASE: Set room to NULL
       await db
@@ -34,7 +36,11 @@ export const leaveRoom = (io, socket) => {
       console.log(roomId);
 
       socket.to(String(roomId)).emit("user_left", {
-        userId: userId,
+        user: {
+          id: userId,
+          username: user.username,
+          avatar: user.avatar,
+        },
         message: buildMsg(ADMIN, `${userName} has left the room`),
       });
 
