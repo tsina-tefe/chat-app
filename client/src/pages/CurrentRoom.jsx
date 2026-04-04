@@ -5,13 +5,13 @@ import { Settings, Smile, Send } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
 import { AuthContext } from "../context/AuthContext";
-import { notifyPresence, notifyError } from "../utils/notifications";
+import { notifyPresence, notifyUser } from "../utils/notifications";
 
 const CurrentRoom = () => {
   const { roomId } = useParams();
   const [messages, setMessages] = useState([]);
   const { socket } = useContext(SocketContext);
-  const { user } = useContext(AuthContext);
+  const { user, updateUserRoom } = useContext(AuthContext);
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [userTyping, setUserTyping] = useState("");
@@ -19,7 +19,7 @@ const CurrentRoom = () => {
 
   useEffect(() => {
     if (!socket || !roomId || !user) return;
-
+    console.log("run away");
     socket.emit("join_room", { roomId, userId: user.userId });
 
     const handleHistory = (data) => {
@@ -36,23 +36,28 @@ const CurrentRoom = () => {
     };
 
     const handleUserLeave = (data) => {
-      console.log(data);
       notifyPresence(data, "leave");
     };
 
     const handleUserJoin = (data) => {
-      console.log(data);
       notifyPresence(data, "join");
     };
 
     const handleError = (data) => {
-      console.log(data);
-      notifyError(data.message);
+      notifyUser(data.message, "error");
     };
 
     const handleUserDisconnected = (data) => {
-      console.log(data);
       notifyPresence(data, "disconnect");
+    };
+
+    const handleJoindeSuccess = (data) => {
+      notifyUser(data.message, "success");
+      updateUserRoom(data.roomId);
+    };
+
+    const handleLeaveSuccess = (data) => {
+      notifyUser(data.message, "success");
     };
 
     socket.emit("get_message_history", { roomId });
@@ -64,10 +69,19 @@ const CurrentRoom = () => {
     socket.on("user_joined", handleUserJoin);
     socket.on("error", handleError);
     socket.on("user_disconnected", handleUserDisconnected);
+    socket.on("room_joined_success", handleJoindeSuccess);
+    socket.on("leave_success", handleLeaveSuccess);
 
     return () => {
-      socket.off("receive_message", handleRecieveMessage);
       socket.off("message_history", handleHistory);
+      socket.off("receive_message", handleRecieveMessage);
+      socket.off("user_typing", handleTyping);
+      socket.off("user_left", handleUserLeave);
+      socket.off("user_joined", handleUserJoin);
+      socket.off("error", handleError);
+      socket.off("user_disconnected", handleUserDisconnected);
+      socket.off("room_joined_success", handleJoindeSuccess);
+      socket.off("leave_success", handleLeaveSuccess);
     };
   }, [socket, roomId]);
 

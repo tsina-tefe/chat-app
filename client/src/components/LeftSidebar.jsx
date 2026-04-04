@@ -3,10 +3,9 @@ import { MessageSquare, Layers, X } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
-const LeftSidebar = ({ isLeftOpen, closeAll, activeRoom }) => {
+const LeftSidebar = ({ isLeftOpen, closeAll }) => {
   const { user } = useContext(AuthContext);
-  // console.log(user);
-  // console.log(user.roomId);
+
   return (
     <aside
       className={`

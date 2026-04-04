@@ -1,23 +1,21 @@
 import React, { useContext } from "react";
-import { Search, User, Users, LogOut, Menu } from "lucide-react";
+import { Search, Users, LogOut, Menu } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import UserMenu from "./UserMenu";
 import { SocketContext } from "../context/SocketContext";
 import { useNavigate } from "react-router-dom";
 
-const Header = ({ setIsLeftOpen, setIsRightOpen, activeRoom, roomDetails }) => {
-  const { user, updateUserRoom } = useContext(AuthContext);
+const Header = ({ setIsLeftOpen, setIsRightOpen, roomDetails }) => {
+  const { updateUserRoom } = useContext(AuthContext);
   const { socket } = useContext(SocketContext);
   const navigate = useNavigate();
 
   const handleLeaveRoom = () => {
-    console.log("leave room", user.roomId);
     updateUserRoom(null);
     socket.emit("leave_room");
     navigate("rooms");
   };
 
-  // console.log(roomDetails);
   return (
     <header className="px-6 md:px-8 py-4 flex items-center justify-between border-b border-gray-50">
       <div className="flex items-center gap-4">

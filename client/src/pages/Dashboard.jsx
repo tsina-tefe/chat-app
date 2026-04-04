@@ -6,13 +6,12 @@ import { Outlet } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { getRoomInfo } from "../api/roomInfoService";
+import { notifyUser } from "../utils/notifications";
 
 const Dashboard = () => {
   const [isLeftOpen, setIsLeftOpen] = useState(false);
   const [isRightOpen, setIsRightOpen] = useState(false);
-
   const { token, user } = useContext(AuthContext);
-  const [activeRoom, setActiveRoom] = useState(user?.roomId);
   const [roomDetails, setRoomDetails] = useState([]);
   const navigate = useNavigate();
 
@@ -46,12 +45,12 @@ const Dashboard = () => {
         const res = await getRoomInfo(user.roomId);
         setRoomDetails(res);
       } catch (error) {
-        console.error("Fetch error:", error);
+        notifyUser({ text: "Something went wrong" }, "error");
       }
     };
 
     fetchDetails();
-  }, [activeRoom, token, user]);
+  }, [token, user]);
 
   // resize effect
   useEffect(() => {
@@ -70,10 +69,6 @@ const Dashboard = () => {
     setIsRightOpen(false);
   };
 
-  const handleSetActiveRoom = (newRoomId) => {
-    setActiveRoom(newRoomId);
-  };
-
   return (
     <div className="flex h-screen w-full bg-[#F3F0F7] p-4 font-sans text-[#635B70] relative overflow-hidden">
       {(isLeftOpen || isRightOpen) && (
@@ -83,22 +78,17 @@ const Dashboard = () => {
         />
       )}
 
-      <LeftSidebar
-        isLeftOpen={isLeftOpen}
-        closeAll={closeAll}
-        activeRoom={activeRoom}
-      />
+      <LeftSidebar isLeftOpen={isLeftOpen} closeAll={closeAll} />
 
       <main className="flex-1 bg-white rounded-[2.5rem] shadow-sm flex flex-col overflow-hidden border border-white relative">
         <Header
           setIsLeftOpen={setIsLeftOpen}
           setIsRightOpen={setIsRightOpen}
-          activeRoom={activeRoom}
           roomDetails={roomDetails}
         />
-
-        <Outlet context={{ activeRoom, handleSetActiveRoom }} />
+        <Outlet />
       </main>
+
       <RightSidebar
         isRightOpen={isRightOpen}
         closeAll={closeAll}

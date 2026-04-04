@@ -55,22 +55,11 @@ export const joinRoom = (io, socket) => {
         message: buildMsg(ADMIN, `${user.username} has joined the room`),
       });
 
-      const [activeUsers] = await db
-        .promise()
-        .query(
-          "SELECT id, username, avatar FROM Users WHERE current_room_id = ?",
-          [roomId],
-        );
-
-      socket.emit("update_user_list", activeUsers);
-
       // Send a confirmation back to the user who joined
       socket.emit("room_joined_success", {
         roomId: roomId,
-        message: buildMsg(ADMIN, `You are now in ${roomId}`),
+        message: "You joined workspace successfully",
       });
-
-      socket.emit("error", { message: "Could not join room" });
     } catch (error) {
       console.error("Socket Join Error:", error);
       socket.emit("error", { message: "Could not join room" });

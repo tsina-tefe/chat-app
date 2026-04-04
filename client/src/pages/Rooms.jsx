@@ -1,15 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Hash, ArrowRight } from "lucide-react";
 import { getRooms } from "../api/roomService";
-import { data, useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
-import { AuthContext } from "../context/AuthContext";
 
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
-  const { activeRoom, handleSetActiveRoom } = useOutletContext();
   const { socket } = useContext(SocketContext);
-  const { user, updateUserRoom } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,25 +22,16 @@ const Rooms = () => {
     };
     handleGetRoom();
 
-    // const handleSuccess = (data) => {
-    //   navigate("/dashboard/room/" + data.roomId);
-    // };
-
-    // socket.on("room_joined_success", handleSuccess);
     socket.on("error", (data) => {
       console.log(data);
     });
 
     return () => {
-      // socket.off("room_joined_success", handleSuccess);
       socket.off("error");
     };
   }, [socket, navigate]);
 
   const handleJoinRoom = (roomId) => {
-    handleSetActiveRoom(roomId);
-    updateUserRoom(roomId);
-    // socket.emit("join_room", { roomId, userId: user.userId });
     navigate("/dashboard/room/" + roomId);
   };
 
@@ -127,7 +115,7 @@ const Rooms = () => {
                   handleJoinRoom(room.id);
                 }}
               >
-                Join{/* if room.is === activeRoom, navigate to currentRoom  */}
+                Join
               </button>
             </div>
           ))}

@@ -44,7 +44,7 @@ export const leaveRoom = (io, socket) => {
 
       // ACKNOWLEDGE TO SENDER
       socket.emit("leave_success", {
-        message: buildMsg(ADMIN, `You have left ${roomId}`),
+        message: "You have left workspace",
       });
 
       console.log(`User ${userId} successfully left room: ${roomId}`);

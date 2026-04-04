@@ -37,7 +37,8 @@ export const notifyPresence = (data, type = "join") => {
   ));
 };
 
-export const notifyError = (errorMsg) => {
+export const notifyUser = (message, type = "success") => {
+  const isSuccess = type === "success";
   toast.custom((t) => (
     <div
       className={`
@@ -46,9 +47,11 @@ export const notifyError = (errorMsg) => {
       animate-in slide-in-from-right-5 duration-300
     `}
     >
-      <div className="p-3 rounded-[2rem] flex-1 overflow-hidden bg-[#A64D79]">
+      <div
+        className={`p-3 rounded-[2rem] flex-1 overflow-hidden ${isSuccess ? "bg-[#7fe47f6f]" : "bg-[#a64d7a6b]"}`}
+      >
         <p className="text-[10px] font-medium text-[#8e8ba2] uppercase tracking-wider">
-          {errorMsg}
+          {message}
         </p>
       </div>
 

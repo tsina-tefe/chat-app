@@ -20,8 +20,6 @@ export const initSocket = (io) => {
   io.on("connection", (socket) => {
     console.log("User has connected: ", socket.id);
 
-    io.emit("message", "Greetings from the backend");
-
     roomHandler(io, socket);
 
     messageHandler(io, socket);
