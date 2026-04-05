@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import LeftMessage from "../components/LeftMessage";
 import RightMessage from "../components/RightMessage";
 import { Settings, Smile, Send } from "lucide-react";
@@ -15,11 +15,15 @@ const CurrentRoom = () => {
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [userTyping, setUserTyping] = useState("");
+  const messagesEndRef = useRef(null);
   let typingTimer;
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     if (!socket || !roomId || !user) return;
-    console.log("run away");
     socket.emit("join_room", { roomId, userId: user.userId });
 
     const handleHistory = (data) => {
@@ -28,6 +32,7 @@ const CurrentRoom = () => {
 
     const handleRecieveMessage = (newMsg) => {
       setMessages((prev) => [...prev, newMsg]);
+      scrollToBottom();
     };
 
     const handleTyping = ({ userId, username, isTyping }) => {
@@ -141,6 +146,7 @@ const CurrentRoom = () => {
             {isTyping ? `${userTyping}   is typing...` : ""}
           </p>
         </div>
+        <div ref={messagesEndRef} className="h-4" />
       </div>
 
       {/* Chat Input */}
