@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     logout();
   }
 
-  const updateUserRoom = (newRoomId) => {
+  function updateUserRoom(newRoomId) {
     setUser((prevUser) => {
       if (!prevUser) return null;
 
@@ -24,23 +24,23 @@ export const AuthProvider = ({ children }) => {
 
       return updatedUser;
     });
-  };
+  }
 
-  const login = (newToken, newUser) => {
+  function login(newToken, newUser) {
     localStorage.setItem("token", newToken);
     localStorage.setItem("user", JSON.stringify(newUser));
 
     setToken(newToken);
     setUser(newUser);
-  };
+  }
 
-  const logout = () => {
+  function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
     setToken(null);
     setUser(null);
-  };
+  }
 
   return (
     <AuthContext.Provider

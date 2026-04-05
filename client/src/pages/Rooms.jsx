@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Hash, ArrowRight } from "lucide-react";
-import { getRooms } from "../api/roomService";
+import { getRooms, creatRoom } from "../api/roomService";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
+import { notifyUser } from "../utils/notifications";
 
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
   const { socket } = useContext(SocketContext);
   const navigate = useNavigate();
+  const [newRoom, setNewRoom] = useState("");
 
   useEffect(() => {
     if (!socket) return;
@@ -22,17 +24,43 @@ const Rooms = () => {
     };
     handleGetRoom();
 
+    socket.on("room_list", handleGetRoom);
     socket.on("error", (data) => {
       console.log(data);
     });
 
     return () => {
       socket.off("error");
+      socket.off("room_list", handleGetRoom);
     };
   }, [socket, navigate]);
 
   const handleJoinRoom = (roomId) => {
     navigate("/dashboard/room/" + roomId);
+  };
+
+  const handleChange = (e) => {
+    setNewRoom(e.target.value);
+  };
+
+  const HandleNewRoom = async () => {
+    try {
+      const res = await creatRoom({ roomName: newRoom });
+      notifyUser(res.message, "success");
+      socket.emit("update_room_list");
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        notifyUser(error.response.data.message, "error");
+      } else {
+        notifyUser("Something went wrong from frontend", "error");
+      }
+    } finally {
+      setNewRoom("");
+    }
   };
 
   return (
@@ -63,11 +91,16 @@ const Rooms = () => {
               </span>
               <input
                 type="text"
+                value={newRoom}
                 placeholder="room-name-exam"
                 className="w-full bg-[#edeaf5] border-none rounded-full py-4 pl-10 pr-6 text-sm outline-none focus:ring-2 focus:ring-purple-100 transition-all"
+                onChange={handleChange}
               />
             </div>
-            <button className="bg-[#5c586d] text-white px-8 py-4 rounded-full font-bold hover:bg-[#4a4658] transition-all shadow-lg active:scale-95">
+            <button
+              className="bg-[#5c586d] text-white px-8 py-4 rounded-full font-bold hover:bg-[#4a4658] transition-all shadow-lg active:scale-95"
+              onClick={HandleNewRoom}
+            >
               Create
             </button>
           </div>

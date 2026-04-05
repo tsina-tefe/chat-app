@@ -8,3 +8,12 @@ export const getRooms = async () => {
     throw error;
   }
 };
+
+export const creatRoom = async (roomData) => {
+  try {
+    const response = await api.post("/api/room/new", roomData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
