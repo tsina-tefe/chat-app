@@ -9,7 +9,7 @@ const LeftSidebar = ({ isLeftOpen, closeAll }) => {
   return (
     <aside
       className={`
-          fixed inset-y-0 left-0 z-50 w-72 bg-[#F3F0F7] p-6 transform transition-transform duration-300 ease-in-out
+          fixed inset-y-0 left-0 z-50 w-72 bg-[#F3F0F7] dark:bg-[#0B0A10] p-6 transform transition-transform duration-300 ease-in-out
           ${isLeftOpen ? "translate-x-0" : "-translate-x-full"}
           min-[1250px]:relative min-[1250px]:translate-x-0 min-[1250px]:flex min-[1250px]:flex-col min-[1250px]:w-64 min-[1250px]:p-0 min-[1250px]:pr-4
         `}
@@ -37,9 +37,7 @@ const LeftSidebar = ({ isLeftOpen, closeAll }) => {
       <nav className="flex-1 space-y-2">
         <NavLink
           className={({ isActive }) => {
-            return isActive
-              ? "w-full flex items-center gap-3 px-4 py-3 bg-[#E2D9F3] text-[#635B70] rounded-2xl font-semibold transition-all"
-              : "w-full flex items-center gap-3 px-4 py-3 hover:bg-white/50 rounded-2xl font-semibold transition-all opacity-80";
+            return `w-full flex items-center gap-3 px-4 py-3 transition-al font-semiboldl rounded-2xl ${isActive ? "bg-[#E2D9F3] text-[#635B70] dark:bg-[#2A263D] dark:text-[#E2D9F3]" : "hover:bg-white/50 dark:hover:bg-white/5 opacity-80"}`;
           }}
           to={user?.roomId ? `room/${user.roomId}` : "rooms"}
           onClick={() => {
@@ -50,9 +48,7 @@ const LeftSidebar = ({ isLeftOpen, closeAll }) => {
         </NavLink>
         <NavLink
           className={({ isActive }) => {
-            return isActive
-              ? "w-full flex items-center gap-3 px-4 py-3 bg-[#E2D9F3] text-[#635B70] rounded-2xl font-semibold transition-all"
-              : "w-full flex items-center gap-3 px-4 py-3 hover:bg-white/50 rounded-2xl font-semibold transition-all opacity-80";
+            return `w-full flex items-center gap-3 px-4 py-3 transition-al font-semiboldl rounded-2xl ${isActive ? "bg-[#E2D9F3] text-[#635B70] dark:bg-[#2A263D] dark:text-[#E2D9F3]" : "hover:bg-white/50 dark:hover:bg-white/5 opacity-80"}`;
           }}
           to={"rooms"}
           onClick={() => {

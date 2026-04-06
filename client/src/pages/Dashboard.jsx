@@ -70,7 +70,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen w-full bg-[#F3F0F7] p-4 font-sans text-[#635B70] relative overflow-hidden">
+    <div className="flex h-screen w-full bg-[#F3F0F7] dark:bg-[#0B0A10] p-4 font-sans text-[#635B70] dark:text-[#E2D9F3] relative overflow-hidden ">
       {(isLeftOpen || isRightOpen) && (
         <div
           className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 min-[1250px]:hidden"
@@ -80,7 +80,7 @@ const Dashboard = () => {
 
       <LeftSidebar isLeftOpen={isLeftOpen} closeAll={closeAll} />
 
-      <main className="flex-1 bg-white rounded-[2.5rem] shadow-sm flex flex-col overflow-hidden border border-white relative">
+      <main className="flex-1 bg-white dark:bg-[#1A1625] rounded-[2.5rem] shadow-sm flex flex-col overflow-hidden border border-white dark:border-[#242132] relative">
         <Header
           setIsLeftOpen={setIsLeftOpen}
           setIsRightOpen={setIsRightOpen}

@@ -30,7 +30,7 @@ const UserMenu = () => {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm hover:scale-105 transition-transform active:scale-95 bg-[#EDEAF5] flex items-center justify-center"
+        className="w-12 h-12 rounded-full overflow-hidden border-2 border-white dark:border-[#86848987] shadow-sm hover:scale-105 transition-transform active:scale-95 bg-[#EDEAF5] dark:bg-[#86848987] flex items-center justify-center"
       >
         {user.avatar ? (
           <img

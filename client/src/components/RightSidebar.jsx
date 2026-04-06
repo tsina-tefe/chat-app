@@ -5,9 +5,9 @@ const RightSidebar = ({ isRightOpen, closeAll, roomDetails }) => {
   return (
     <aside
       className={`
-          fixed inset-y-0 right-0 z-50 w-72 bg-[#F3F0F7] p-6 transform transition-transform duration-300 ease-in-out
+          fixed inset-y-0 right-0 z-50 w-72 bg-[#F3F0F7] dark:bg-[#0B0A10] p-6 transform transition-transform duration-300 ease-in-out 
           ${isRightOpen ? "translate-x-0" : "translate-x-full"}
-          min-[1250px]:relative min-[1250px]:translate-x-0 min-[1250px]:flex min-[1250px]:flex-col min-[1250px]:w-80 min-[1250px]:p-0 min-[1250px]:pl-6
+          min-[1250px]:relative min-[1250px]:translate-x-0 min-[1250px]:flex min-[1250px]:flex-col min-[1250px]:w-80 min-[1250px]:p-0 min-[1250px]:pl-6 
         `}
     >
       <div className="flex items-center justify-between mb-8 min-[1250px]:block">

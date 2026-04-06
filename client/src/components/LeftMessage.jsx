@@ -12,13 +12,13 @@ const LeftMessage = ({ message }) => {
         />
       </div>
       <div className="space-y-1">
-        <p className="text-[10px] font-bold ml-2 opacity-40">
+        <p className="text-[10px] font-bold ml-2 opacity-40 dark:opacity-70">
           {message.username}
         </p>
-        <div className="bg-[#EBE7F1] p-5 rounded-[2rem] rounded-bl-none text-sm leading-relaxed">
+        <div className="bg-[#EBE7F1] dark:bg-[#2D2A3D] text-[#635B70] dark:text-[#E2D9F3] p-5 rounded-[2rem] rounded-bl-none text-sm leading-relaxed">
           {message.content}
         </div>
-        <p className="text-[10px] ml-2 opacity-40">
+        <p className="text-[10px] ml-2 opacity-40 dark:opacity-60">
           {formatTime(message.timestamp)}
         </p>
       </div>

@@ -4,6 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import UserMenu from "./UserMenu";
 import { SocketContext } from "../context/SocketContext";
 import { useNavigate } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle";
 
 const Header = ({ setIsLeftOpen, setIsRightOpen, roomDetails }) => {
   const { updateUserRoom } = useContext(AuthContext);
@@ -17,11 +18,11 @@ const Header = ({ setIsLeftOpen, setIsRightOpen, roomDetails }) => {
   };
 
   return (
-    <header className="px-6 md:px-8 py-4 flex items-center justify-between border-b border-gray-50">
+    <header className="px-6 md:px-8 py-4 flex items-center justify-between border-b border-gray-50 dark:border-[#1A1625]">
       <div className="flex items-center gap-4">
         <button
           onClick={() => setIsLeftOpen(true)}
-          className="min-[1250px]:hidden p-2 bg-[#F3F0F7] rounded-xl hover:bg-[#E2D9F3]"
+          className="min-[1250px]:hidden p-2 bg-[#F3F0F7] dark:bg-[#86848987] rounded-xl hover:bg-[#E2D9F3]"
         >
           <Menu size={20} />
         </button>
@@ -39,6 +40,7 @@ const Header = ({ setIsLeftOpen, setIsRightOpen, roomDetails }) => {
       </div>
 
       <div className="flex items-center gap-2 md:gap-4">
+        <ThemeToggle />
         <div className="relative hidden xl:block">
           <Search
             className="absolute left-3 top-1/2 -translate-y-1/2 opacity-30"
@@ -53,7 +55,7 @@ const Header = ({ setIsLeftOpen, setIsRightOpen, roomDetails }) => {
 
         <button
           onClick={() => setIsRightOpen(true)}
-          className="min-[1250px]:flex items-center gap-2 p-2 bg-[#F3F0F7] rounded-full hover:bg-[#E2D9F3] transition-colors"
+          className="min-[1250px]:flex items-center gap-2 p-2 bg-[#F3F0F7] dark:bg-[#86848987] rounded-full hover:bg-[#E2D9F3] dark:hover:bg-[#5e5966]  transition-colors"
         >
           <Users size={18} />
           <span className="text-[10px] font-bold pr-1 hidden sm:inline min-[1250px]:hidden">

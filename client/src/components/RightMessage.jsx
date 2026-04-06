@@ -12,13 +12,13 @@ const RightMessage = ({ message }) => {
         />
       </div>
       <div className="space-y-1 text-right">
-        <p className="text-[10px] font-bold mr-2 opacity-40 uppercase">
+        <p className="text-[10px] font-bold mr-2 opacity-40 dark:opacity-70 uppercase">
           {message.username}
         </p>
-        <div className="bg-[#635B70] text-white p-5 rounded-[2rem] rounded-br-none text-sm leading-relaxed text-left">
+        <div className="bg-[#635B70] dark:bg-[#4A4258] text-white dark:text-[#D1CADA] p-5 rounded-[2rem] rounded-br-none text-sm leading-relaxed text-left">
           {message.content}
         </div>
-        <p className="text-[10px] mr-2 opacity-40">
+        <p className="text-[10px] mr-2 opacity-40 dark:opacity-60">
           {formatTime(message.timestamp)}
         </p>
       </div>
