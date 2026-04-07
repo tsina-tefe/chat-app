@@ -46,9 +46,9 @@ const UserMenu = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-4 w-72 bg-white rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-[#F3F0F7] p-5 z-[100] animate-in fade-in zoom-in duration-200 origin-top-right">
+        <div className="absolute right-0 mt-4 w-72 bg-white dark:bg-[#0B0A10] rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-[#F3F0F7] dark:border-[#3c3b3e] p-5 z-[100] animate-in fade-in zoom-in duration-200 origin-top-right">
           <div className="flex flex-col items-center text-center mb-4">
-            <div className="w-20 h-20 rounded-full bg-[#F3F0F7] mb-3 border-4 border-white shadow-inner overflow-hidden flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-[#F3F0F7] dark:bg-[#86848987]  mb-3 border-4 border-white dark:border-[#86848987] shadow-inner overflow-hidden flex items-center justify-center">
               {user.avatar ? (
                 <img
                   src={user.avatar}
@@ -60,19 +60,19 @@ const UserMenu = () => {
               )}
             </div>
 
-            <h3 className="font-extrabold text-[#4a4658] text-lg leading-tight">
+            <h3 className="font-extrabold text-[#4a4658] dark:text-[#6d697a] text-lg leading-tight">
               {user.name}
             </h3>
             <p className="text-[10px] font-bold text-green-500 uppercase tracking-widest mb-2">
               Online
             </p>
 
-            <span className="px-3 py-1 bg-[#F3F0F7] text-[#635B70] text-[10px] font-bold rounded-full uppercase tracking-tighter">
+            <span className="px-3 py-1 bg-[#F3F0F7] dark:bg-[#6a6075] text-[#635B70] dark:text-[#b9b7bd] text-[10px] font-bold rounded-full uppercase tracking-tighter">
               Workspace Member
             </span>
           </div>
 
-          <div className="h-px bg-[#F3F0F7] w-full mb-4" />
+          <div className="h-px bg-[#F3F0F7] dark:bg-[#7d7786] w-full mb-4" />
 
           <div className="space-y-1 mb-6">
             <p className="text-[10px] font-bold text-[#8e8ba2] uppercase tracking-widest ml-1">
@@ -80,7 +80,7 @@ const UserMenu = () => {
             </p>
             <button
               onClick={handleCopyEmail}
-              className="w-full flex items-center justify-between px-4 py-3 bg-[#F8F7FD] hover:bg-[#EDEAF5] rounded-2xl group transition-colors"
+              className="w-full flex items-center justify-between px-4 py-3 bg-[#F8F7FD] dark:bg-[#9e9da3] hover:bg-[#EDEAF5] dark:hover:bg-[#cccad2] rounded-2xl group transition-colors"
             >
               <span className="text-xs text-[#635B70] font-medium truncate pr-2">
                 {user.email}
@@ -98,7 +98,7 @@ const UserMenu = () => {
 
           <button
             onClick={() => logout()}
-            className="w-full flex items-center justify-center gap-2 py-4 bg-[#F5E1E9] hover:bg-[#f0d1de] text-[#A64D79] rounded-[1.5rem] font-bold text-sm transition-all active:scale-[0.98]"
+            className="w-full flex items-center justify-center gap-2 py-4 bg-[#e4d1d9c6] dark:bg-[#f5e1e9c0] hover:bg-[#f0d1de] dark:hover:bg-[#e1c0ce] text-[#A64D79] rounded-[1.5rem] font-bold text-sm transition-all active:scale-[0.98]"
           >
             <LogOut size={18} />
             Logout

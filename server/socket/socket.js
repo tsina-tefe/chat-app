@@ -5,10 +5,10 @@ import jwt from "jsonwebtoken";
 export const initSocket = (io) => {
   console.log("io");
   io.use((socket, next) => {
-    const token = socket.handshake.auth.token; // attach token to socket
+    const token = socket.handshake.auth.token;
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      socket.user = decoded; // Contains userId
+      socket.user = decoded;
       console.log(socket.user);
       next();
     } catch (err) {

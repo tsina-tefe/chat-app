@@ -3,7 +3,7 @@ import db from "../config/db.js";
 export const getRoomInfo = async (req, res) => {
   const { roomId } = req.params;
   try {
-    // This query gets the room name and the list of users currently in it
+    // query to get the room name and the list of users currently in it
     const query = `
       SELECT 
         r.room_name AS roomName, 
@@ -22,7 +22,6 @@ export const getRoomInfo = async (req, res) => {
       return res.status(404).json({ message: "Room not found" });
     }
 
-    // Format the data into one clean object
     const roomInfo = {
       roomName: rows[0].roomName,
       participants: rows[0].userId
@@ -32,7 +31,7 @@ export const getRoomInfo = async (req, res) => {
             avatar: row.avatar,
             username: row.username,
           }))
-        : [], // If no users are in the room, return empty array
+        : [],
     };
 
     res.status(200).json(roomInfo);

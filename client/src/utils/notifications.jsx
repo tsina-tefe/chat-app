@@ -42,15 +42,15 @@ export const notifyUser = (message, type = "success") => {
   toast.custom((t) => (
     <div
       className={`
-      flex items-center gap-3 p-4 w-80 bg-white/90 backdrop-blur-md 
-      border border-white rounded-[2rem] shadow-xl shadow-purple-100/50
-      animate-in slide-in-from-right-5 duration-300
+      flex items-center gap-3 p-4 w-80 bg-white/90 dark:bg-white/25 backdrop-blur-md 
+      border border-white dark:border-white/35 rounded-[2rem] shadow-xl shadow-purple-100/50
+      dark:shadow-purple-900/50 animate-in slide-in-from-right-5 duration-300
     `}
     >
       <div
         className={`p-3 rounded-[2rem] flex-1 overflow-hidden ${isSuccess ? "bg-[#7fe47f6f]" : "bg-[#a64d7a6b]"}`}
       >
-        <p className="text-[10px] font-medium text-[#8e8ba2] uppercase tracking-wider">
+        <p className="text-[10px] font-medium text-[#8e8ba2] dark:text-[#1e1d22] uppercase tracking-wider">
           {message}
         </p>
       </div>

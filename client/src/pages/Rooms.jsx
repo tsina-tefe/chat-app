@@ -64,7 +64,7 @@ const Rooms = () => {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto h-screen bg-[#fcfbff] flex flex-col p-8 md:p-16 font-sans text-[#4a4658] custom-scrollbar">
+    <div className="flex-1 overflow-y-auto h-screen bg-[#fcfbff] dark:bg-[#1A1625] flex flex-col p-8 md:p-16 font-sans text-[#4a4658] custom-scrollbar">
       <header className="mb-12 max-w-2xl">
         <h1 className="text-5xl font-bold mb-4 tracking-tight">
           Rooms Explorer
@@ -76,7 +76,7 @@ const Rooms = () => {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-        <div className="md:col-span-2 bg-white rounded-[3rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-white flex flex-col justify-between">
+        <div className="md:col-span-2 bg-white dark:bg-[#191523] rounded-[3rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-white dark:border-[#37304a] flex flex-col justify-between">
           <div>
             <h2 className="text-2xl font-bold mb-2">Create New Room</h2>
             <p className="text-[#8e8ba2] text-sm mb-8">
@@ -93,12 +93,12 @@ const Rooms = () => {
                 type="text"
                 value={newRoom}
                 placeholder="room-name-exam"
-                className="w-full bg-[#edeaf5] border-none rounded-full py-4 pl-10 pr-6 text-sm outline-none focus:ring-2 focus:ring-purple-100 transition-all"
+                className="w-full bg-[#edeaf5] dark:bg-[#4b4851] border-none dark:text-[#a19fb1] rounded-full py-4 pl-10 pr-6 text-sm outline-none focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-950 transition-all"
                 onChange={handleChange}
               />
             </div>
             <button
-              className="bg-[#5c586d] text-white px-8 py-4 rounded-full font-bold hover:bg-[#4a4658] transition-all shadow-lg active:scale-95"
+              className="bg-[#5c586d] text-white dark:text-[#a19fb1] px-8 py-4 rounded-full font-bold hover:bg-[#4a4658] transition-all shadow-lg active:scale-95"
               onClick={HandleNewRoom}
             >
               Create
@@ -106,12 +106,10 @@ const Rooms = () => {
           </div>
         </div>
 
-        <div className="bg-[#e2def2] rounded-[3rem] p-10 flex flex-col justify-between items-start relative overflow-hidden">
+        <div className="bg-[#e2def2] dark:bg-[#1b191c87] rounded-[3rem] p-10 flex flex-col justify-between items-start relative overflow-hidden">
           <div>
-            <h3 className="text-5xl font-bold mb-1">124</h3>
-            <p className="text-[#5c586d] font-semibold opacity-70">
-              Online now
-            </p>
+            <h3 className="text-5xl font-bold mb-1">{rooms.length}</h3>
+            <p className="text-[#5c586d] font-semibold opacity-70">Rooms now</p>
           </div>
           <div className="absolute top-[-20%] right-[-20%] w-32 h-32 bg-white/20 rounded-full blur-2xl" />
         </div>
@@ -129,11 +127,11 @@ const Rooms = () => {
           {rooms.map((room) => (
             <div
               key={room.id}
-              className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-white flex items-center justify-between hover:shadow-md transition-shadow group"
+              className="bg-white dark:bg-[#191523] rounded-[2.5rem] p-6 shadow-sm border border-white dark:border-[#37304a] flex items-center justify-between hover:shadow-md transition-shadow group"
             >
               <div className="flex items-center gap-5">
                 <div
-                  className={`w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center text-[#4a4658]`}
+                  className={`w-14 h-14 bg-gray-100 dark:bg-[#2c2a2d87] rounded-full flex items-center justify-center text-[#4a4658]`}
                 >
                   <Hash size={20} />
                 </div>
@@ -142,7 +140,7 @@ const Rooms = () => {
                 </div>
               </div>
               <button
-                className="bg-[#edeaf5] text-[#5c586d] px-6 py-2.5 rounded-full font-bold text-sm hover:bg-[#e2def2] transition-all active:scale-95"
+                className="bg-[#edeaf5] dark:bg-[#2c2a2d87] text-[#5c586d] px-6 py-2.5 rounded-full font-bold text-sm hover:bg-[#e2def2] transition-all active:scale-95"
                 onClick={() => {
                   console.log("join room ", room.room_name, room.id);
                   handleJoinRoom(room.id);

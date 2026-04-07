@@ -122,18 +122,11 @@ const CurrentRoom = () => {
 
   return (
     <>
-      {/* Messages Feed */}
       <div
         className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 custom-scrollbar
   [--sb-thumb:#E2D9F3] 
   dark:[--sb-thumb:#66263D]"
       >
-        {/* <div className="flex justify-center">
-          <span className="bg-[#F3F0F7] text-[10px] font-bold px-4 py-1 rounded-full opacity-60">
-            Jordan joined the room
-          </span>
-        </div> */}
-
         {messages.map((message) =>
           message.userId === user?.userId ? (
             <RightMessage message={message} key={message.id} />
@@ -153,7 +146,6 @@ const CurrentRoom = () => {
         <div ref={messagesEndRef} className="h-4" />
       </div>
 
-      {/* Chat Input */}
       <footer className="p-4 md:p-6">
         <div className="bg-[#F3F0F7] dark:bg-[#0B0A10] rounded-[2rem] p-2 flex items-center gap-2">
           <input
