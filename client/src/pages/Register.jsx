@@ -7,6 +7,7 @@ import EncryptionBadge from "../components/EncryptionBadge";
 import Username from "../components/Username";
 import { registerService } from "../api/authService";
 import { useNavigate } from "react-router-dom";
+import ThemeToggle from "../components/ThemeToggle";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -63,13 +64,16 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#f8f7fd] flex flex-col items-center justify-center p-6 font-sans relative overflow-hidden">
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-100 rounded-full blur-3xl opacity-50" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-pink-50 rounded-full blur-3xl opacity-50" />
+    <div className="min-h-screen w-full bg-[#f8f7fd] dark:bg-[#0B0A10] flex flex-col items-center justify-center p-6 font-sans relative overflow-hidden">
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-100 dark:bg-purple-300/30  rounded-full blur-3xl opacity-50" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-pink-50 dark:bg-purple-300/30 rounded-full blur-3xl opacity-50" />
+      <div className="fixed top-6 right-6 z-50">
+        <ThemeToggle />
+      </div>
 
       <AuthHeader header={"Join the ethereal workspace."} />
 
-      <div className="w-full max-w-md bg-white rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-10 z-10 border border-white/50">
+      <div className="w-full max-w-md bg-white dark:bg-[#161420] rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-10 z-10 border border-white/50 dark:border-white/10">
         {error ? <p className="text-red-600 text-center">{error}</p> : ""}
         {message ? <p className="text-green-500 text-center">{message}</p> : ""}
         <form className="space-y-6">
@@ -82,7 +86,7 @@ const Register = () => {
           />
 
           <button
-            className="w-full bg-[#5c586d] hover:bg-[#4a4658] text-white font-bold py-5 rounded-3xl shadow-xl shadow-purple-200 transition-all active:scale-[0.98] mt-4"
+            className="w-full bg-[#5c586d] hover:bg-[#4a4658] text-white font-bold py-5 rounded-3xl shadow-xl shadow-purple-200 dark:shadow-purple-900/20 transition-all active:scale-[0.98] mt-4"
             onClick={(e) => {
               e.preventDefault();
               setError("");
