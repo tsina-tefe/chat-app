@@ -7,13 +7,13 @@ import { SocketProvider } from "./context/SocketContext.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  // <StrictMode>
-  <AuthProvider>
-    <SocketProvider>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
-    </SocketProvider>
-  </AuthProvider>,
-  // </StrictMode>
+  <StrictMode>
+    <AuthProvider>
+      <SocketProvider>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </SocketProvider>
+    </AuthProvider>
+  </StrictMode>,
 );
