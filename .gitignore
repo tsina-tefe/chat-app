@@ -9,18 +9,10 @@ node_modules/
 .env.production.local
 **/.env
 **/.env.local
-
-client/build/
-client/dist/
-server/dist/
-out/
-.next/
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-logs/
-*.log
+**/.env.example
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
 
 .vscode/
 .idea/

@@ -7,30 +7,29 @@ export const SocketContext = createContext();
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const { token } = useContext(AuthContext);
+  const socketUrl =
+    import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL;
 
   useEffect(() => {
+    let newSocket = null;
+
     if (token) {
-      const newSocket = io("http://localhost:3500", {
+      newSocket = io(socketUrl, {
         auth: { token },
         transports: ["websocket"],
-        reconnectionAttempts: 5, // Stop trying after 5 failed attempts
-        reconnectionDelay: 5000, // Wait 5 seconds between each try (instead of 1s)
+        reconnectionAttempts: 5,
+        reconnectionDelay: 5000,
         timeout: 20000,
       });
 
       setSocket(newSocket);
-
-      // disconnect on logout or tab close
-      //   return () => {
-      //     newSocket.close();
-      //   };
     } else {
-      if (socket) {
-        socket.close();
+      if (newSocket) {
+        newSocket.close();
         setSocket(null);
       }
     }
-  }, [token]);
+  }, [token, socketUrl]);
 
   return (
     <SocketContext.Provider value={{ socket }}>

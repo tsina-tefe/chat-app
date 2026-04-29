@@ -16,6 +16,7 @@ const CurrentRoom = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [userTyping, setUserTyping] = useState("");
   const messagesEndRef = useRef(null);
+  const lastJoinSuccessRoomRef = useRef(null);
   let typingTimer;
 
   const scrollToBottom = () => {
@@ -57,6 +58,10 @@ const CurrentRoom = () => {
     };
 
     const handleJoindeSuccess = (data) => {
+      if (lastJoinSuccessRoomRef.current === data.roomId) {
+        return;
+      }
+      lastJoinSuccessRoomRef.current = data.roomId;
       notifyUser(data.message, "success");
       updateUserRoom(data.roomId);
     };
