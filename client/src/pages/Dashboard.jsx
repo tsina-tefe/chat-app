@@ -2,9 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import LeftSidebar from "../components/LeftSidebar";
 import RightSidebar from "../components/RightSidebar";
 import Header from "../components/Header";
-import { Outlet } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth-context";
 import { getRoomInfo } from "../api/roomInfoService";
 import { notifyUser } from "../utils/notifications";
 
@@ -14,6 +13,7 @@ const Dashboard = () => {
   const { token, user } = useContext(AuthContext);
   const [roomDetails, setRoomDetails] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // redirect effect
   useEffect(() => {
@@ -36,21 +36,19 @@ const Dashboard = () => {
 
   // fetch details
   useEffect(() => {
-    if (!token || !user?.roomId) {
-      setRoomDetails([]);
-      return;
-    }
+    if (!token || !user?.roomId) return;
+
     const fetchDetails = async () => {
       try {
         const res = await getRoomInfo(user.roomId);
         setRoomDetails(res);
-      } catch (error) {
+      } catch {
         notifyUser({ text: "Something went wrong" }, "error");
       }
     };
 
     fetchDetails();
-  }, [token, user]);
+  }, [token, user?.roomId]);
 
   // resize effect
   useEffect(() => {

@@ -3,8 +3,8 @@ import LeftMessage from "../components/LeftMessage";
 import RightMessage from "../components/RightMessage";
 import { Settings, Smile, Send } from "lucide-react";
 import { useParams } from "react-router-dom";
-import { SocketContext } from "../context/SocketContext";
-import { AuthContext } from "../context/AuthContext";
+import { SocketContext } from "../context/socket-context";
+import { AuthContext } from "../context/auth-context";
 import { notifyPresence, notifyUser } from "../utils/notifications";
 
 const CurrentRoom = () => {
@@ -17,7 +17,7 @@ const CurrentRoom = () => {
   const [userTyping, setUserTyping] = useState("");
   const messagesEndRef = useRef(null);
   const lastJoinSuccessRoomRef = useRef(null);
-  let typingTimer;
+  const typingTimerRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -25,7 +25,7 @@ const CurrentRoom = () => {
 
   useEffect(() => {
     if (!socket || !roomId || !user) return;
-    socket.emit("join_room", { roomId, userId: user.userId });
+    socket.emit("join_room", { roomId });
 
     const handleHistory = (data) => {
       setMessages(data);
@@ -36,7 +36,7 @@ const CurrentRoom = () => {
       scrollToBottom();
     };
 
-    const handleTyping = ({ userId, username, isTyping }) => {
+    const handleTyping = ({ username, isTyping }) => {
       setIsTyping(isTyping);
       setUserTyping(username);
     };
@@ -83,6 +83,7 @@ const CurrentRoom = () => {
     socket.on("leave_success", handleLeaveSuccess);
 
     return () => {
+      clearTimeout(typingTimerRef.current);
       socket.off("message_history", handleHistory);
       socket.off("receive_message", handleRecieveMessage);
       socket.off("user_typing", handleTyping);
@@ -93,7 +94,7 @@ const CurrentRoom = () => {
       socket.off("room_joined_success", handleJoindeSuccess);
       socket.off("leave_success", handleLeaveSuccess);
     };
-  }, [socket, roomId]);
+  }, [socket, roomId, user, updateUserRoom]);
 
   const handleNewMessage = () => {
     if (!newMessage.trim()) return;
@@ -109,8 +110,8 @@ const CurrentRoom = () => {
     setNewMessage(e.target.value);
     socket.emit("typing", { roomId, username: user.username, isTyping: true });
 
-    clearTimeout(typingTimer);
-    typingTimer = setTimeout(() => {
+    clearTimeout(typingTimerRef.current);
+    typingTimerRef.current = setTimeout(() => {
       socket.emit("typing", {
         roomId,
         username: user.username,

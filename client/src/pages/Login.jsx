@@ -4,7 +4,7 @@ import PasswordInput from "../components/PasswordInput";
 import AuthHeader from "../components/AuthHeader";
 import EncryptionBadge from "../components/EncryptionBadge";
 import { loginService } from "../api/authService";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/auth-context";
 import { useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 
@@ -16,7 +16,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login, token, user } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {

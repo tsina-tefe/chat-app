@@ -1,7 +1,5 @@
-import { createContext, useState } from "react";
-import { isTokenExpired } from "../utils/checkToken";
-
-export const AuthContext = createContext();
+import { useState } from "react";
+import { AuthContext } from "./auth-context";
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
@@ -9,10 +7,6 @@ export const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
-
-  if (token && isTokenExpired(token)) {
-    logout();
-  }
 
   function updateUserRoom(newRoomId) {
     setUser((prevUser) => {

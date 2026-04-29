@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { MessageSquare, Layers, X } from "lucide-react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { NavLink } from "react-router-dom";
+import { AuthContext } from "../context/auth-context";
 
 const LeftSidebar = ({ isLeftOpen, closeAll }) => {
   const { user } = useContext(AuthContext);

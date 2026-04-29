@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-
-const ThemeContext = createContext();
+import React, { useEffect, useState } from "react";
+import { ThemeContext } from "./theme-context";
 
 export const ThemeProvider = ({ children }) => {
   // Initialize state from localStorage or system preference
@@ -31,5 +30,3 @@ export const ThemeProvider = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
-
-export const useTheme = () => useContext(ThemeContext);

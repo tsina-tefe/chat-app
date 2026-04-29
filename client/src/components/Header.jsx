@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { Search, Users, LogOut, Menu } from "lucide-react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/auth-context";
 import UserMenu from "./UserMenu";
-import { SocketContext } from "../context/SocketContext";
+import { SocketContext } from "../context/socket-context";
 import { useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
 

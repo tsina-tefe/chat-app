@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Hash, ArrowRight } from "lucide-react";
 import { getRooms, creatRoom } from "../api/roomService";
 import { useNavigate } from "react-router-dom";
-import { SocketContext } from "../context/SocketContext";
+import { SocketContext } from "../context/socket-context";
 import { notifyUser } from "../utils/notifications";
 
 const Rooms = () => {

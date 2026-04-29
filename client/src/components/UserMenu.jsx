@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useRef } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/auth-context";
 import { LogOut, Copy, Check, User as UserIcon } from "lucide-react";
 
 const UserMenu = () => {
