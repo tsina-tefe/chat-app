@@ -5,13 +5,33 @@ const ADMIN = "Admin";
 
 export const joinRoom = (io, socket) => {
   socket.on("join_room", async (data) => {
-    let { roomId, userId } = data;
-    if (roomId === "null") {
-      roomId = null;
-    }
-
     try {
-      // Fetch User and their PREVIOUS room from DB
+      const userId = socket.user?.userId;
+      if (!userId) {
+        socket.emit("error", { message: "Unauthorized socket session" });
+        return;
+      }
+
+      if (!data || typeof data !== "object") {
+        socket.emit("error", { message: "Invalid data format" });
+        return;
+      }
+
+      let { roomId } = data;
+
+      if (roomId === "null" || roomId === null || roomId === undefined) {
+        roomId = null;
+      }
+
+      if (
+        roomId !== null &&
+        typeof roomId !== "string" &&
+        typeof roomId !== "number"
+      ) {
+        socket.emit("error", { message: "Invalid roomId" });
+        return;
+      }
+
       const [users] = await db
         .promise()
         .query(
@@ -22,8 +42,15 @@ export const joinRoom = (io, socket) => {
       if (users.length === 0) return;
       const user = users[0];
       const previousRoomId = user.current_room_id;
+      const sameRoom =
+        previousRoomId !== null &&
+        roomId !== null &&
+        String(previousRoomId) === String(roomId);
 
-      // LEAVE PREVIOUS ROOM
+      if (sameRoom) {
+        return;
+      }
+
       if (previousRoomId && previousRoomId !== roomId) {
         socket.leave(String(previousRoomId));
 
@@ -43,7 +70,6 @@ export const joinRoom = (io, socket) => {
           userId,
         ]);
 
-      // JOIN NEW ROOM
       socket.join(String(roomId));
 
       socket.to(String(roomId)).emit("user_joined", {
@@ -55,7 +81,6 @@ export const joinRoom = (io, socket) => {
         message: buildMsg(ADMIN, `${user.username} has joined the room`),
       });
 
-      // Send a confirmation back to the user who joined
       socket.emit("room_joined_success", {
         roomId: roomId,
         message: "You joined workspace successfully",

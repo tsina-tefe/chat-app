@@ -5,7 +5,7 @@ const ADMIN = "Admin";
 
 export const disconnectHandler = (io, socket) => {
   socket.on("disconnecting", async () => {
-    const userId = socket.user.id;
+    const userId = socket.user.userId;
 
     const rooms = Array.from(socket.rooms).filter((r) => r !== socket.id);
 

@@ -53,7 +53,7 @@ export const messageHandler = (io, socket) => {
 
   socket.on("typing", ({ roomId, username, isTyping }) => {
     socket.to(String(roomId)).emit("user_typing", {
-      userId: socket.user.id,
+      userId: socket.user.userId,
       username,
       isTyping,
     });
