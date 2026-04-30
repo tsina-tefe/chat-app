@@ -1,10 +1,11 @@
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo, useRef } from "react";
 import { AuthContext } from "./auth-context";
 import { io } from "socket.io-client";
 import { SocketContext } from "./socket-context";
 
 export const SocketProvider = ({ children }) => {
   const { token } = useContext(AuthContext);
+  const previousSocketRef = useRef(null);
   const socketUrl =
     import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL;
   const socket = useMemo(() => {
@@ -19,9 +20,10 @@ export const SocketProvider = ({ children }) => {
   }, [token, socketUrl]);
 
   useEffect(() => {
-    return () => {
-      socket?.close();
-    };
+    if (previousSocketRef.current && previousSocketRef.current !== socket) {
+      previousSocketRef.current.close();
+    }
+    previousSocketRef.current = socket;
   }, [socket]);
 
   return (

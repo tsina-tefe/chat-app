@@ -25,7 +25,6 @@ const CurrentRoom = () => {
 
   useEffect(() => {
     if (!socket || !roomId || !user) return;
-    socket.emit("join_room", { roomId });
 
     const handleHistory = (data) => {
       setMessages(data);
@@ -70,8 +69,6 @@ const CurrentRoom = () => {
       notifyUser(data.message, "success");
     };
 
-    socket.emit("get_message_history", { roomId });
-
     socket.on("message_history", handleHistory);
     socket.on("receive_message", handleRecieveMessage);
     socket.on("user_typing", handleTyping);
@@ -82,8 +79,20 @@ const CurrentRoom = () => {
     socket.on("room_joined_success", handleJoindeSuccess);
     socket.on("leave_success", handleLeaveSuccess);
 
+    const requestRoomData = () => {
+      socket.emit("join_room", { roomId });
+      socket.emit("get_message_history", { roomId });
+    };
+
+    if (socket.connected) {
+      requestRoomData();
+    } else {
+      socket.once("connect", requestRoomData);
+    }
+
     return () => {
       clearTimeout(typingTimerRef.current);
+      socket.off("connect", requestRoomData);
       socket.off("message_history", handleHistory);
       socket.off("receive_message", handleRecieveMessage);
       socket.off("user_typing", handleTyping);
