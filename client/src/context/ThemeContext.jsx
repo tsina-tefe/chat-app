@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { ThemeContext } from "./theme-context";
 
 export const ThemeProvider = ({ children }) => {
-  // Initialize state from localStorage or system preference
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const saved = localStorage.getItem("theme");
     return (

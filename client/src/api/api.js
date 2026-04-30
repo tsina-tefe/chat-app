@@ -12,7 +12,7 @@ api.interceptors.request.use(
     if (token && isTokenExpired(token)) {
       localStorage.removeItem("token");
 
-      window.location.href = "/api/login";
+      window.location.href = "/login";
       return Promise.reject("Token expired");
     }
 
@@ -23,7 +23,6 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
-    // Handle request setup errors
     return Promise.reject(error);
   },
 );
