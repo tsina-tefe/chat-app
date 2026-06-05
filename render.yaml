@@ -33,9 +33,8 @@ services:
     name: fluid-chat-client
     runtime: static
     rootDir: client
-    plan: free
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    staticPublishPath: client/dist
     envVars:
       - key: VITE_API_URL
         sync: false
