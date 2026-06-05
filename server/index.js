@@ -13,7 +13,7 @@ import roomInfo from "./routes/room-info.js";
 
 dotenv.config();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3500;
 const isProd = process.env.NODE_ENV === "production";
 const allowedOrigins = (process.env.ALLOWED_ORIGINS ||
   "http://localhost:5173,http://127.0.0.1:5173")
@@ -68,6 +68,10 @@ app.use((req, res, next) => {
 });
 
 initSocket(io);
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
 app.use("/api/register", authLimiter, register);
 

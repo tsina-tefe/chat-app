@@ -2,7 +2,7 @@ import db from "../config/db.js";
 
 export const getActiveRooms = async (req, res) => {
   try {
-    const [rooms] = await db.promise().query("SELECT * FROM Rooms");
+    const [rooms] = await db.promise().query("SELECT * FROM rooms");
 
     res.status(200).json(rooms);
   } catch (error) {

@@ -3,6 +3,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const useSsl = process.env.DB_SSL === "true";
+const caCert = process.env.DB_CA_CERT?.replace(/\\n/g, "\n");
+
 const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -12,6 +15,12 @@ const db = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  ...(useSsl && {
+    ssl: {
+      ...(caCert && { ca: caCert }),
+      rejectUnauthorized: true,
+    },
+  }),
 });
 
 db.getConnection((error, connection) => {

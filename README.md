@@ -96,3 +96,82 @@ From client/:
 - The websocket client currently connects to http://localhost:3500, so keep the backend port aligned with PORT unless you update the client Socket.IO URL.
 - The app stores the JWT and user profile in local storage to restore the session on refresh.
 - If you change API hosts or ports, update VITE_API_URL in the client environment.
+
+## Deploy to Render
+
+This app deploys as two Render services: a Node API and a static React frontend. The database stays on your existing Aiven MySQL instance (`mysql-3a40375e`).
+
+### 1. Prepare Aiven MySQL
+
+1. Open `mysql-3a40375e` in the Aiven console.
+2. Create a new database for this app, for example `chat_app`.
+3. Run the SQL in `server/schema.sql` against that database.
+4. From the Aiven service overview, copy:
+   - Host
+   - Port
+   - Username
+   - Password
+   - CA certificate
+
+### 2. Push code to GitHub
+
+Render deploys from your GitHub repo: `https://github.com/tsina-tefe/chat-app`
+
+### 3. Create the Render services
+
+**Option A: Blueprint (recommended)**
+
+1. Go to [render.com](https://render.com) → **New** → **Blueprint**.
+2. Connect the `chat-app` repo.
+3. Render will read `render.yaml` and create both services.
+4. Fill in the environment variables when prompted (see below).
+5. Deploy the API first. After it is live, set the client `VITE_API_URL` and `VITE_SOCKET_URL` to the API URL, then redeploy the client.
+
+**Option B: Manual**
+
+Create two services:
+
+| Setting | API service | Client service |
+|---|---|---|
+| Type | Web Service | Static Site |
+| Root directory | `server` | `client` |
+| Build command | `npm install` | `npm install && npm run build` |
+| Start command | `npm start` | — |
+| Publish directory | — | `dist` |
+
+### 4. API environment variables (Render)
+
+```bash
+NODE_ENV=production
+JWT_SECRET=<generate-a-long-random-string>
+DB_HOST=<aiven-host>
+DB_USER=<aiven-user>
+DB_PASSWORD=<aiven-password>
+DB_NAME=chat_app
+DB_PORT=<aiven-port>
+DB_SSL=true
+DB_CA_CERT=<paste-aiven-ca-certificate>
+ALLOWED_ORIGINS=https://your-client.onrender.com
+```
+
+For `DB_CA_CERT`, paste the full CA certificate from Aiven. Render supports multiline values.
+
+### 5. Client environment variables (Render)
+
+```bash
+VITE_API_URL=https://your-api.onrender.com
+VITE_SOCKET_URL=https://your-api.onrender.com
+```
+
+`VITE_*` variables are baked in at build time. After changing them, trigger a new deploy of the client service.
+
+### 6. Verify
+
+1. Open `https://your-api.onrender.com/health` — should return `{"status":"ok"}`.
+2. Open the client URL, register a user, create a room, and send a message.
+
+### Render free tier notes
+
+- The API sleeps after inactivity and may take ~30 seconds to wake on the first request.
+- WebSockets are supported on Render web services.
+- Keep Aiven and Render URLs in sync with `ALLOWED_ORIGINS`.

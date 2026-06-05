@@ -9,13 +9,13 @@ export const messageHandler = (io, socket) => {
       const [result] = await db
         .promise()
         .query(
-          "INSERT INTO Messages (user_id, room_id, content) VALUES (?, ?, ?)",
+          "INSERT INTO messages (user_id, room_id, content) VALUES (?, ?, ?)",
           [userId, roomId, content],
         );
 
       const [users] = await db
         .promise()
-        .query("SELECT username, avatar FROM Users WHERE id = ?", [userId]);
+        .query("SELECT username, avatar FROM users WHERE id = ?", [userId]);
 
       const newMessage = {
         id: result.insertId,
@@ -37,8 +37,8 @@ export const messageHandler = (io, socket) => {
     try {
       const [messages] = await db.promise().query(
         `SELECT m.id, m.content, m.timestamp, m.room_id, u.id as userId, u.username, u.avatar 
-         FROM Messages m 
-         JOIN Users u ON m.user_id = u.id 
+         FROM messages m 
+         JOIN users u ON m.user_id = u.id 
          WHERE m.room_id = ? 
          ORDER BY m.timestamp ASC LIMIT 50`,
         [roomId],
